@@ -1,0 +1,147 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => {
+		if (a.data.featured !== b.data.featured) {
+			return b.data.featured ? 1 : -1;
+		}
+		return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+	}
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Projects - ${SITE_TITLE}`} description="My projects and work" />
+		<style>
+			main {
+				width: 960px;
+			}
+			ul {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2rem;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+			ul li {
+				background: var(--gray-gradient);
+				border-radius: 8px;
+				padding: 1.5rem;
+				transition: transform 0.2s ease-in-out;
+			}
+			ul li:hover {
+				transform: translateY(-2px);
+			}
+			ul li * {
+				text-decoration: none;
+				transition: 0.2s ease;
+			}
+			ul li .date {
+				margin: 0;
+				color: rgb(var(--gray));
+				font-size: 0.875rem;
+			}
+			ul li h4 {
+				margin: 0.5rem 0 0.25rem 0;
+				font-size: 1.25rem;
+			}
+			ul li p {
+				margin: 0.5rem 0 0 0;
+				color: rgb(var(--gray-dark));
+				line-height: 1.5;
+			}
+			.status {
+				display: inline-block;
+				padding: 0.25rem 0.5rem;
+				font-size: 0.75rem;
+				border-radius: 4px;
+				font-weight: 500;
+				margin-top: 0.5rem;
+			}
+			.status.completed {
+				background-color: #d4edda;
+				color: #155724;
+			}
+			.status.in-progress {
+				background-color: #fff3cd;
+				color: #856404;
+			}
+			.status.planned {
+				background-color: #d6d8db;
+				color: #495057;
+			}
+			.technologies {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin-top: 0.75rem;
+			}
+			.tech-tag {
+				background-color: rgb(var(--accent));
+				color: white;
+				padding: 0.125rem 0.5rem;
+				border-radius: 4px;
+				font-size: 0.75rem;
+			}
+			.project-image {
+				width: 100%;
+				height: 150px;
+				object-fit: cover;
+				border-radius: 4px;
+				margin-bottom: 0.5rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Projects</h1>
+			<section>
+				<ul>
+					{
+						projects.map((project) => (
+							<li>
+								<a href={`/projects/${project.slug}/`}>
+									{project.data.image && (
+										<img
+											class="project-image"
+											src={project.data.image}
+											alt={project.data.title}
+										/>
+									)}
+									<p class="date">
+										Started: {project.data.startDate.toLocaleDateString('en-us', {
+											year: 'numeric',
+											month: 'short',
+										})}
+									</p>
+									<h4>{project.data.title}</h4>
+									<p>{project.data.description}</p>
+									<span class={`status ${project.data.status}`}>
+										{project.data.status.replace('-', ' ')}
+									</span>
+									{project.data.technologies && project.data.technologies.length > 0 && (
+										<div class="technologies">
+											{project.data.technologies.map((tech) => (
+												<span class="tech-tag">{tech}</span>
+											))}
+										</div>
+									)}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

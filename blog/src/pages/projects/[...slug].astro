@@ -1,0 +1,175 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+	const projects = await getCollection('projects');
+	return projects.map((project) => ({
+		params: { slug: project.slug },
+		props: project,
+	}));
+}
+type Props = CollectionEntry<'projects'>;
+
+const project = Astro.props;
+const { Content } = await project.render();
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={project.data.title} description={project.data.description} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.project-meta {
+				display: flex;
+				justify-content: center;
+				gap: 1rem;
+				margin-bottom: 1rem;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: rgb(var(--gray));
+			}
+			.status {
+				display: inline-block;
+				padding: 0.25rem 0.75rem;
+				font-size: 0.875rem;
+				border-radius: 4px;
+				font-weight: 500;
+			}
+			.status.completed {
+				background-color: #d4edda;
+				color: #155724;
+			}
+			.status.in-progress {
+				background-color: #fff3cd;
+				color: #856404;
+			}
+			.status.planned {
+				background-color: #d6d8db;
+				color: #495057;
+			}
+			.technologies {
+				display: flex;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin: 1rem 0;
+			}
+			.tech-tag {
+				background-color: rgb(var(--accent));
+				color: white;
+				padding: 0.25rem 0.75rem;
+				border-radius: 4px;
+				font-size: 0.875rem;
+			}
+			.project-links {
+				display: flex;
+				justify-content: center;
+				gap: 1rem;
+				margin: 1rem 0;
+			}
+			.project-links a {
+				padding: 0.5rem 1rem;
+				border: 2px solid rgb(var(--accent));
+				border-radius: 4px;
+				text-decoration: none;
+				color: rgb(var(--accent));
+				font-weight: 500;
+				transition: all 0.2s ease;
+			}
+			.project-links a:hover {
+				background-color: rgb(var(--accent));
+				color: white;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="hero-image">
+					{project.data.image && <img width={1020} height={510} src={project.data.image} alt={project.data.title} />}
+				</div>
+				<div class="prose">
+					<div class="title">
+						<div class="date">
+							Started: {project.data.startDate.toLocaleDateString('en-us', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+							})}
+							{project.data.endDate && (
+								<> - Ended: {project.data.endDate.toLocaleDateString('en-us', {
+									year: 'numeric',
+									month: 'long',
+									day: 'numeric',
+								})}</>
+							)}
+						</div>
+						<h1>{project.data.title}</h1>
+						<div class="project-meta">
+							<span class={`status ${project.data.status}`}>
+								{project.data.status.replace('-', ' ')}
+							</span>
+						</div>
+						{project.data.technologies && project.data.technologies.length > 0 && (
+							<div class="technologies">
+								{project.data.technologies.map((tech) => (
+									<span class="tech-tag">{tech}</span>
+								))}
+							</div>
+						)}
+						<div class="project-links">
+							{project.data.link && (
+								<a href={project.data.link} target="_blank" rel="noopener noreferrer">
+									View Project
+								</a>
+							)}
+							{project.data.github && (
+								<a href={project.data.github} target="_blank" rel="noopener noreferrer">
+									View on GitHub
+								</a>
+							)}
+						</div>
+					</div>
+					<Content />
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
