@@ -3,13 +3,10 @@ title: 'Net Metrics'
 description: 'A comprehensive analytics platform for tracking and improving volleyball player performance through data-driven insights.'
 category: 'Sports Analytics'
 technologies: ['Python', 'React', 'PostgreSQL', 'TensorFlow', 'D3.js']
-link: ''
-github: ''
 image: '/blog-placeholder-3.jpg'
 featured: true
 status: 'in-progress'
 startDate: 'Mar 10 2024'
-endDate: ''
 ---
 
 ## Project Overview
