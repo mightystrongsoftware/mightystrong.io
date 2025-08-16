@@ -15,13 +15,20 @@ Psychologists have discussed this tendency for decades—cognitive dissonance wa
 
 Draper describes the easy road: you don’t win people with data or analysis; you bathe them in emotionally comforting “facts” that short-circuit deeper thinking and whisper, Relax—you’ve already made the right choice.
 
-Partisan outlets use the same playbook, serving information in ways that keep you “sticky” to their channel:
+Partisan outlets use the same playbook, serving information in ways that keep you “sticky” to their channel.
 
-| Tactic                                   | How It Works                                                                                                                                      |
-|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| “New-Car Smell”                          | High-production graphics and dramatic “Breaking News” sound effects seize attention before analysis starts.                                        |
-| ADT – “We’re Home Even When You’re Not”   | Narratives claiming only our side can protect you from immigrants, crime, or economic ruin heighten threat perception and shut down deliberation.  |
-| Allstate – “You’re in Good Hands”         | Familiar hosts echo your worldview, wrapping you in a warm identity blanket you won’t want to leave.                                               |
+## Tactic - New-Car Smell
+High-production graphics and dramatic “Breaking News” sound effects seize attention before analysis starts.
+
+## Tactic - ADT
+> “We’re Home Even When You’re Not”
+
+Narratives claiming only our side can protect you from immigrants, crime, or economic ruin heighten threat perception and shut down deliberation.
+
+## Tactic - AllState
+> "You're in good hands" (with AllState)
+
+Familiar hosts echo your worldview, wrapping you in a warm identity blanket you won’t want to leave.
 
 ## Engaging System 2
 
@@ -29,4 +36,7 @@ Daniel Kahneman popularized System 1 and System 2 thinking:
 * System 1 is lightning-fast, emotional, and prone to bias.
 * System 2 is slow, deliberate, and capable of overriding System 1—but it can be lazy and rubber-stamp first impressions.
 
-Partisan outlets aim for System 1, hoping to keep System 2 asleep. The antidote is deliberate self-questioning. When you feel that warm glow of certainty, pause and ask Why do I feel this way? Probe the cues—images, adjectives, music—rather than the claims themselves. Then ask: Do the core facts still stand without the packaging?
+Partisan outlets aim for System 1, hoping to keep System 2 asleep. The antidote is deliberate self-questioning. 
+* When you feel that warm glow of certainty, pause and ask Why do I feel this way?
+* Probe the cues—images, adjectives, music—rather than the claims themselves.
+* Then ask: Do the core facts still stand without the packaging?

@@ -1,0 +1,138 @@
+---
+title: 'Interactable Volleyball Rotation'
+description: 'An interactive guide to understanding and mastering volleyball rotation patterns, positions, and strategies'
+pubDate: 2025-08-15
+---
+
+Understanding volleyball rotation can be one of the most confusing aspects for new players and coaches. This interactive guide breaks down the rotation system, positions, and movement patterns that form the foundation of competitive volleyball.
+
+## The Basics of Rotation
+
+In volleyball, all six players must rotate positions clockwise each time their team wins the serve from the opponent. This ensures every player gets a chance to play in each position, though specialized roles emerge once the ball is served.
+
+## The Six Positions
+
+The court positions are numbered 1 through 6:
+
+- **Position 1**: Back right (Server position)
+- **Position 2**: Front right
+- **Position 3**: Front middle
+- **Position 4**: Front left
+- **Position 5**: Back left
+- **Position 6**: Back middle
+
+## Rotation Rules
+
+### Key Points to Remember:
+
+1. **Rotation occurs** only when your team wins a rally while the other team was serving (called a "side out")
+2. **Players rotate clockwise** - Position 1 moves to 6, Position 6 to 5, and so on
+3. **The player in Position 1** always serves
+4. **Before the serve**, players must be in their rotational positions
+5. **After the serve**, players can move to their specialized positions
+
+## Common Formations
+
+### 5-1 System
+One setter who sets from all six rotations. This is the most common system in competitive volleyball.
+
+**Advantages:**
+- Consistent setting from one player
+- More attacking options with three front-row hitters
+
+**Challenges:**
+- Complex rotation patterns
+- Setter must be athletic and versatile
+
+### 6-2 System
+Two setters who only set from the back row, allowing for three front-row attackers at all times.
+
+**Advantages:**
+- Always three front-row attackers
+- Simpler offensive patterns
+
+**Challenges:**
+- Two different setters means less consistency
+- Requires two skilled setters
+
+### 4-2 System
+Two setters who set from the front row. Common in beginner volleyball.
+
+**Advantages:**
+- Simple to understand
+- Easy rotation patterns
+
+**Challenges:**
+- Only two front-row attackers
+- Limited offensive options
+
+## Specialized Positions
+
+Once the serve is contacted, players move to their specialized positions:
+
+### Outside Hitter (OH)
+- Plays front left when in the front row
+- Primary attacker and passer
+- Usually receives most sets
+
+### Middle Blocker (MB)
+- Plays middle positions
+- Key blocker and quick attacker
+- Often substituted by libero in back row
+
+### Opposite/Right Side (OPP)
+- Plays opposite the setter
+- Strong attacker and blocker
+- Often the go-to hitter in critical situations
+
+### Setter (S)
+- Runs the offense
+- Touches the ball on every possession
+- Must have excellent court awareness
+
+### Libero (L)
+- Defensive specialist
+- Cannot attack or block
+- Wears different colored jersey
+- Can substitute freely for back-row players
+
+## Rotation Strategies
+
+### Serve Receive Formations
+
+**W-Formation**: Five players form a W shape to receive serve, with the setter hidden or protected.
+
+**U-Formation**: Three players form a U shape, common when you have strong passers.
+
+### Offensive Transitions
+
+After the serve, watch how quickly players transition:
+- Middles sprint to the center
+- Outside hitters move to the left
+- Setter releases to their setting position
+- Back row players adjust for coverage
+
+## Common Rotation Errors
+
+1. **Overlapping**: Being out of rotation order before the serve
+2. **Wrong Server**: Player from wrong position attempting to serve
+3. **Illegal Substitution**: Not following substitution rules
+4. **Back Row Attack**: Back row player attacking from in front of the 3-meter line
+
+## Tips for Learning Rotation
+
+1. **Start Simple**: Learn the 4-2 system first
+2. **Use Visual Aids**: Draw rotations on paper or whiteboard
+3. **Practice Transitions**: Focus on moving from rotational to playing positions
+4. **Watch Games**: Observe how professional teams handle rotations
+5. **Communicate**: Call out rotations and positions during practice
+
+## Interactive Elements Coming Soon
+
+We're working on adding interactive rotation diagrams where you can:
+- Click through each rotation
+- See player movements animated
+- Practice identifying legal vs illegal positions
+- Test your knowledge with rotation puzzles
+
+Understanding rotation is crucial for volleyball success. While it seems complex initially, with practice and repetition, rotation becomes second nature. The key is understanding not just where to stand, but why each position matters and how they work together as a system.
