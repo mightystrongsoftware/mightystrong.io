@@ -1,46 +1,88 @@
 ---
-// CourtDemo.astro
-// Props are optional; you can tweak size if you want.
-const { width = 760, height = 760 } = Astro.props;
+/* CourtDemo.astro */
+const { maxWidth = 760 } = Astro.props; // set via <CourtDemo maxWidth={900} />
+const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
 ---
 
 <style>
-  .court-root { display:grid; place-items:center; }
+  .court-root {
+    /* Allow parent layout to control available width */
+    inline-size: 100%;
+    display: grid;
+    place-items: center;
+  }
 
-  /* Use CSS variables + aspect-ratio; no media query overrides */
+  /* Aspect-ratio sizing (no media queries) */
   .court {
-    /* You can set these via props -> style: --court-w */
-    inline-size: min(100%, var(--court-w, 760px));
-    aspect-ratio: 1 / 1;        /* keep it square */
-    block-size: auto;           /* auto height from aspect-ratio */
-    background:#f6b080; border-radius:16px; padding:20px; position:relative;
-    box-shadow: inset 0 0 0 2px rgba(0,0,0,0.15), 0 30px 70px rgba(0,0,0,0.35);
-    overflow:hidden;
+    /* cap width with CSS var; default from props */
+    --court-w: var(--court-w-override, /* fallback: */ 760px);
+    inline-size: min(100%, var(--court-w));
+    aspect-ratio: 1 / 1;   /* keep square */
+    block-size: auto;
+
+    background: #f6b080;
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      inset 0 0 0 2px rgba(0,0,0,0.15),
+      0 30px 70px rgba(0,0,0,0.35);
   }
 
-  .net { position:absolute; left:0; right:0; top:50%; height:2px; background:#0b5; }
+  .net {
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    height: 2px;
+    background: #0b5;
+  }
 
+  /* Floating action button (Reset) */
   .fab {
-    position:absolute; top:14px; right:14px; z-index:3;
-    display:inline-flex; align-items:center; gap:8px; padding:12px 14px;
-    border:0; border-radius:999px; background:#174e6d; color:#fff; font-weight:700; cursor:pointer;
-    box-shadow:0 12px 28px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.12);
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: #174e6d;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.12);
+  }
+  .fab:active { transform: translateY(1px); }
+
+  .player {
+    position: absolute;
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: #11394f; /* bottom team */
+    color: #fff;
+    display: grid;
+    place-items: center;
+    user-select: none;
+    cursor: grab;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(255,255,255,0.08);
+    transition: box-shadow 120ms ease;
+  }
+  .player.teamB { background: #3a2b57; } /* top team */
+  .player:active {
+    cursor: grabbing;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45), inset 0 0 0 2px rgba(255,255,255,0.14);
   }
 
-  .player { position:absolute; width:56px; height:56px; border-radius:16px;
-    background:#11394f; color:#fff; display:grid; place-items:center;
-    cursor:grab; user-select:none;
-    box-shadow:0 10px 24px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(255,255,255,0.08);
-    transition:box-shadow 120ms ease;
-  }
-  .player.teamB { background:#3a2b57; }
-  .player:active { cursor:grabbing; box-shadow:0 6px 16px rgba(0,0,0,0.45), inset 0 0 0 2px rgba(255,255,255,0.14); }
-  .num { font-weight:800; font-size:18px; }
-  .lab { font-size:11px; opacity:.85; margin-top:-4px; }
+  .num { font-weight: 800; font-size: 18px; }
+  .lab { font-size: 11px; opacity: .85; margin-top: -4px; }
 </style>
 
-<div class="court-root">
-  <div class="court" aria-label="Full volleyball court with twelve movable players (two teams)">
+<div id={uid} class="court-root" style={`--court-w-override: ${maxWidth}px`}>
+  <div class="court" aria-label="Volleyball court with two teams">
     <button class="fab" type="button" aria-label="Reset positions">Reset</button>
     <div class="net"></div>
   </div>
@@ -48,13 +90,27 @@ const { width = 760, height = 760 } = Astro.props;
 
 <script is:inline>
 (function(){
-  const root = document.currentScript.closest('.court-root');
+  console.log("CourtDemo mounted");
+  const root = document.getElementById('${uid}');
+  if (!root) {
+    console.log("Didn't find root ");
+    return;
+  } else {
+    console.log("Found root");
+  }
+
   const court = root.querySelector('.court');
   const resetBtn = root.querySelector('.fab');
+  if (!court || !resetBtn) return;
 
+  // --- Geometry helpers ---
   const PADDING = 20, size = 56, gapY = 24, gapX = 24;
-  const W = () => court.clientWidth, H = () => court.clientHeight;
+  const W = () => court.clientWidth;
+  const H = () => court.clientHeight;
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
+  // --- Players & constraints ---
+  // Bottom team shows 1..6; Top team also shows 1..6 but IDs 11..16
   const players = {
     1:{id:1,label:'RB',team:'bottom'}, 2:{id:2,label:'RF',team:'bottom'}, 3:{id:3,label:'MF',team:'bottom'},
     4:{id:4,label:'LF',team:'bottom'}, 5:{id:5,label:'LB',team:'bottom'}, 6:{id:6,label:'MB',team:'bottom'},
@@ -62,147 +118,162 @@ const { width = 760, height = 760 } = Astro.props;
     14:{id:14,label:'LF',team:'top'}, 15:{id:15,label:'LB',team:'top'}, 16:{id:16,label:'MB',team:'top'}
   };
 
-  // bottom dir +1, top dir -1 (mirrored)
+  // dir +1 = bottom team perspective; dir -1 = top (mirrored)
   const constraints = [
+    // Bottom: back behind front; lateral right-of order within row
     { a:1, b:2, type:'behind', dir:+1 }, { a:6, b:3, type:'behind', dir:+1 }, { a:5, b:4, type:'behind', dir:+1 },
     { a:1, b:6, type:'rightOf', dir:+1 }, { a:6, b:5, type:'rightOf', dir:+1 }, { a:2, b:3, type:'rightOf', dir:+1 }, { a:3, b:4, type:'rightOf', dir:+1 },
+    // Top mirrored
     { a:11, b:12, type:'behind', dir:-1 }, { a:16, b:13, type:'behind', dir:-1 }, { a:15, b:14, type:'behind', dir:-1 },
     { a:11, b:16, type:'rightOf', dir:-1 }, { a:16, b:15, type:'rightOf', dir:-1 }, { a:12, b:13, type:'rightOf', dir:-1 }, { a:13, b:14, type:'rightOf', dir:-1 }
   ];
 
-  // Build player nodes scoped to this component
+  // --- Build DOM nodes for players ---
   const els = {};
   for (const id of Object.keys(players)) {
     const p = players[id];
     const el = document.createElement('div');
-    el.className = 'player' + (p.team==='top' ? ' teamB' : '');
-    el.setAttribute('role','button');
-    el.setAttribute('aria-grabbed','false');
+    el.className = 'player' + (p.team === 'top' ? ' teamB' : '');
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-grabbed', 'false');
     el.dataset.pid = id;
-    const shown = p.team==='top' ? (p.id-10) : p.id; // show 1..6 on both sides
+    const shown = p.team === 'top' ? (p.id - 10) : p.id; // display 1..6 both sides
     el.innerHTML = '<div class="num">'+shown+'</div><div class="lab">'+p.label+'</div>';
     court.appendChild(el);
     els[id] = el;
   }
 
-  // Helpers
-  const clamp = (v,min,max) => Math.max(min, Math.min(max, v));
-  const halfMinY = (team) => team==='top' ? PADDING : (H()/2 + 2);
-  const halfMaxY = (team) => team==='top' ? (H()/2 - size - 2) : (H() - PADDING - size);
+  // --- Court half limits (no net crossing) ---
+  const halfMinY = (team) => team === 'top' ? PADDING : (H()/2 + 2);
+  const halfMaxY = (team) => team === 'top' ? (H()/2 - size - 2) : (H() - PADDING - size);
+
+  // --- Position helpers ---
   function setPos(id, x, y){
     const team = players[id].team;
-    const cx = clamp(x, PADDING, W()-PADDING-size);
+    const cx = clamp(x, PADDING, W() - PADDING - size);
     const cy = clamp(y, halfMinY(team), halfMaxY(team));
     const el = els[id];
     el.dataset.x = cx; el.dataset.y = cy;
     el.style.transform = 'translate('+cx+'px,'+cy+'px)';
   }
-  const getPos = (id) => ({ x: parseFloat(els[id].dataset.x||'0'), y: parseFloat(els[id].dataset.y||'0') });
+  const getPos = (id) => {
+    const el = els[id];
+    return { x: parseFloat(el.dataset.x || '0'), y: parseFloat(el.dataset.y || '0') };
+  };
 
-  // Constraint solver
-  function satisfyAll(maxIters=28){
-    for(let k=0;k<maxIters;k++){
-      let any=false;
-      for(const c of constraints){
-        const A=getPos(c.a), B=getPos(c.b);
-        if(c.type==='behind'){
-          if(c.dir===+1){
-            if(A.y < B.y + gapY){
+  // --- Constraint solver ---
+  function satisfyAll(maxIters = 28){
+    for (let k = 0; k < maxIters; k++) {
+      let any = false;
+      for (const c of constraints) {
+        const A = getPos(c.a), B = getPos(c.b);
+        if (c.type === 'behind') {
+          if (c.dir === +1) {
+            if (A.y < B.y + gapY) {
               const newBy = clamp(A.y - gapY, halfMinY(players[c.b].team), halfMaxY(players[c.b].team));
-              if(newBy!==B.y){ setPos(c.b, B.x, newBy); any=true; continue; }
+              if (newBy !== B.y) { setPos(c.b, B.x, newBy); any = true; continue; }
               const newAy = clamp(B.y + gapY, halfMinY(players[c.a].team), halfMaxY(players[c.a].team));
-              if(newAy!==A.y){ setPos(c.a, A.x, newAy); any=true; }
+              if (newAy !== A.y) { setPos(c.a, A.x, newAy); any = true; }
             }
-          } else {
-            if(A.y > B.y - gapY){
+          } else { // dir -1
+            if (A.y > B.y - gapY) {
               const newBy = clamp(A.y + gapY, halfMinY(players[c.b].team), halfMaxY(players[c.b].team));
-              if(newBy!==B.y){ setPos(c.b, B.x, newBy); any=true; continue; }
+              if (newBy !== B.y) { setPos(c.b, B.x, newBy); any = true; continue; }
               const newAy = clamp(B.y - gapY, halfMinY(players[c.a].team), halfMaxY(players[c.a].team));
-              if(newAy!==A.y){ setPos(c.a, A.x, newAy); any=true; }
+              if (newAy !== A.y) { setPos(c.a, A.x, newAy); any = true; }
             }
           }
-        } else { // rightOf
-          if(c.dir===+1){
-            if(A.x < B.x + gapX){
-              const newBx = clamp(A.x - gapX, PADDING, W()-PADDING-size);
-              if(newBx!==B.x){ setPos(c.b, newBx, B.y); any=true; continue; }
-              const newAx = clamp(B.x + gapX, PADDING, W()-PADDING-size);
-              if(newAx!==A.x){ setPos(c.a, newAx, A.y); any=true; }
+        } else if (c.type === 'rightOf') {
+          if (c.dir === +1) { // A right of B
+            if (A.x < B.x + gapX) {
+              const newBx = clamp(A.x - gapX, PADDING, W() - PADDING - size);
+              if (newBx !== B.x) { setPos(c.b, newBx, B.y); any = true; continue; }
+              const newAx = clamp(B.x + gapX, PADDING, W() - PADDING - size);
+              if (newAx !== A.x) { setPos(c.a, newAx, A.y); any = true; }
             }
-          } else {
-            if(A.x > B.x - gapX){
-              const newBx = clamp(A.x + gapX, PADDING, W()-PADDING-size);
-              if(newBx!==B.x){ setPos(c.b, newBx, B.y); any=true; continue; }
-              const newAx = clamp(B.x - gapX, PADDING, W()-PADDING-size);
-              if(newAx!==A.x){ setPos(c.a, newAx, A.y); any=true; }
+          } else {           // A left of B (mirrored)
+            if (A.x > B.x - gapX) {
+              const newBx = clamp(A.x + gapX, PADDING, W() - PADDING - size);
+              if (newBx !== B.x) { setPos(c.b, newBx, B.y); any = true; continue; }
+              const newAx = clamp(B.x - gapX, PADDING, W() - PADDING - size);
+              if (newAx !== A.x) { setPos(c.a, newAx, A.y); any = true; }
             }
           }
         }
       }
-      if(!any) break;
+      if (!any) break;
     }
   }
 
-  // Layout
+  // --- Initial layout (symmetric, mirrored) ---
   function resetPositions(){
-    const w = W()-PADDING*2-size;
+    console.log('Reset');
+    const w = W() - PADDING*2 - size;
     const half = H()/2;
     const colL = PADDING + 60;
     const colM = PADDING + w/2 - 16;
-    const colR = court.clientWidth - PADDING - 60 - size;
-    const botFrontY = half + 40, botBackY = half + 160;
+    const colR = W() - PADDING - 60 - size;
+
+    const botFrontY = half + 40,  botBackY = half + 160;
     const topFrontY = half - 40 - size, topBackY = half - 160 - size;
 
     // Bottom (left→center→right)
-    setPos(4,colL,botFrontY); setPos(3,colM,botFrontY); setPos(2,colR,botFrontY);
-    setPos(5,colL,botBackY ); setPos(6,colM,botBackY ); setPos(1,colR,botBackY );
+    setPos(4, colL, botFrontY); setPos(3, colM, botFrontY); setPos(2, colR, botFrontY);
+    setPos(5, colL, botBackY ); setPos(6, colM, botBackY ); setPos(1, colR, botBackY );
 
     // Top mirrored (left→center→right visually)
-    setPos(12,colL,topFrontY); setPos(13,colM,topFrontY); setPos(14,colR,topFrontY);
-    setPos(11,colL,topBackY ); setPos(16,colM,topBackY ); setPos(15,colR,topBackY );
+    setPos(12, colL, topFrontY); setPos(13, colM, topFrontY); setPos(14, colR, topFrontY);
+    setPos(11, colL, topBackY ); setPos(16, colM, topBackY ); setPos(15, colR, topBackY );
 
     satisfyAll();
   }
 
-  // Dragging
-  let dragging=null, offset={x:0,y:0};
+  // --- Dragging ---
+  let dragging = null, offset = { x:0, y:0 };
   function onPointerDown(e){
-    const el=e.currentTarget; dragging=el;
-    const rect=court.getBoundingClientRect();
-    const x=(e.clientX||e.touches?.[0]?.clientX)-rect.left;
-    const y=(e.clientY||e.touches?.[0]?.clientY)-rect.top;
-    offset.x = x - parseFloat(el.dataset.x||'0');
-    offset.y = y - parseFloat(el.dataset.y||'0');
-    el.setAttribute('aria-grabbed','true');
+    const el = e.currentTarget; dragging = el;
+    const rect = court.getBoundingClientRect();
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+    const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
+    offset.x = x - parseFloat(el.dataset.x || '0');
+    offset.y = y - parseFloat(el.dataset.y || '0');
+    el.setAttribute('aria-grabbed', 'true');
     e.preventDefault();
   }
   function onPointerMove(e){
-    if(!dragging) return;
-    const rect=court.getBoundingClientRect();
-    const x=(e.clientX||e.touches?.[0]?.clientX)-rect.left - offset.x;
-    const y=(e.clientY||e.touches?.[0]?.clientY)-rect.top - offset.y;
-    const id = parseInt(dragging.dataset.pid,10);
+    if (!dragging) return;
+    const rect = court.getBoundingClientRect();
+    const x = (e.clientX || e.touches?.[0]?.clientX) - rect.left - offset.x;
+    const y = (e.clientY || e.touches?.[0]?.clientY) - rect.top  - offset.y;
+    const id = parseInt(dragging.dataset.pid, 10);
     setPos(id, x, y);
     satisfyAll();
   }
-  function onPointerUp(){ if(dragging) dragging.setAttribute('aria-grabbed','false'); dragging=null; }
+  function onPointerUp(){
+    if (dragging) dragging.setAttribute('aria-grabbed','false');
+    dragging = null;
+  }
 
-  // Attach
-  function attachListeners(){
-    for(const id of Object.keys(els)){
-      const el=els[id];
+  // Attach listeners
+  function attach(){
+    for (const id of Object.keys(els)) {
+      const el = els[id];
       el.addEventListener('mousedown', onPointerDown);
-      el.addEventListener('touchstart', onPointerDown, {passive:false});
+      el.addEventListener('touchstart', onPointerDown, { passive:false });
     }
-    window.addEventListener('mousemove', onPointerMove, {passive:true});
-    window.addEventListener('touchmove', onPointerMove, {passive:false});
-    window.addEventListener('mouseup', onPointerUp);
-    window.addEventListener('touchend', onPointerUp);
+    window.addEventListener('mousemove', onPointerMove, { passive:true  });
+    window.addEventListener('touchmove', onPointerMove, { passive:false });
+    window.addEventListener('mouseup',   onPointerUp);
+    window.addEventListener('touchend',  onPointerUp);
+
     resetBtn.addEventListener('click', resetPositions);
-    window.addEventListener('resize', resetPositions);
+
+    // Reflow on element size changes (more reliable than window.resize)
+    const ro = new ResizeObserver(() => requestAnimationFrame(resetPositions));
+    ro.observe(court);
   }
 
   resetPositions();
-  attachListeners();
+  attach();
 })();
 </script>
