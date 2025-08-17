@@ -111,3 +111,70 @@ npm run build  # This will catch most errors
 - Content collection schemas are defined in `src/content/config.ts`
 - Static assets in the `public/` directory are served from the root URL path
 - remember these details when adding new images
+
+# Portable HTML + JS in Astro – Technical Guide
+
+When I ask you to generate HTML + JS for Astro, please follow these technical requirements:
+
+## 1. Put code into a dedicated `.astro` component
+- Wrap the widget inside a self-contained `.astro` file (e.g., `CourtDemo.astro`).
+- Do not output raw `<script>` in `.mdx` or Markdown, since Astro strips or blocks them.
+
+## 2. Root element with unique ID
+- Always generate a unique `uid` in the component frontmatter:
+```astro
+  ---
+  const uid = `widget-${Math.random().toString(36).slice(2, 10)}`;
+  ---
+```
+	•	Apply it to the root container:
+```
+<div id={uid} class="widget-root"></div>
+```
+## 3. Inline script with Astro variable binding
+	•	Put JS logic inside:
+```astro
+<script is:inline define:vars={{ uid }}>
+
+```
+	•	Use requestAnimationFrame to delay DOM queries until after layout:
+```js
+requestAnimationFrame(() => {
+  const root = document.getElementById(uid);
+  if (!root) { console.warn("Root not found", uid); return; }
+  // JS init here
+});
+```
+
+## 4. CSS scoping
+	•	Container/layout styles can remain scoped.
+	•	Any elements created dynamically by JS must be styled inside a <style is:global> block, otherwise Astro’s scoped selectors won’t match:
+```astro
+<style is:global>
+  .player { position: absolute; }
+</style>
+```
+5. Sizing and responsiveness
+	•	Use aspect-ratio on the main container to keep it square or rectangular without media queries:
+```css
+.court {
+  inline-size: min(100%, var(--court-w, 760px));
+  aspect-ratio: 1 / 1;
+}
+```
+	•	Do not assume fixed width; instead, use court.clientWidth and court.clientHeight inside JS.
+## 6. Resize awareness
+	•	Attach a ResizeObserver to recompute layout when the element changes size:
+```js
+const ro = new ResizeObserver(() => requestAnimationFrame(resetPositions));
+ro.observe(root);
+```
+
+## 7. Multiple instances safe
+	•	Never use fixed IDs like #court. Always scope selectors by the local uid.
+
+## 8. Debugging
+	•	At init/reset, log sizes:
+```js
+console.table({ W: root.clientWidth, H: root.clientHeight });
+	•	If logic works only after resize, the script is likely running before layout. Fix with requestAnimationFrame.

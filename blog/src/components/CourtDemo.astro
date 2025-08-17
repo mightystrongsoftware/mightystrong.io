@@ -5,21 +5,18 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
 ---
 
 <style>
+<style>
   .court-root {
-    /* Allow parent layout to control available width */
     inline-size: 100%;
     display: grid;
     place-items: center;
   }
 
-  /* Aspect-ratio sizing (no media queries) */
   .court {
-    /* cap width with CSS var; default from props */
-    --court-w: var(--court-w-override, /* fallback: */ 760px);
+    --court-w: var(--court-w-override, 760px);
     inline-size: min(100%, var(--court-w));
-    aspect-ratio: 1 / 1;   /* keep square */
+    aspect-ratio: 1 / 1;
     block-size: auto;
-
     background: #f6b080;
     border-radius: 16px;
     padding: 20px;
@@ -38,7 +35,6 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
     background: #0b5;
   }
 
-  /* Floating action button (Reset) */
   .fab {
     position: absolute;
     top: 14px;
@@ -57,7 +53,10 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
     box-shadow: 0 12px 28px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.12);
   }
   .fab:active { transform: translateY(1px); }
+</style>
 
+<!-- Make dynamic nodes (players) global so JS-created elements are styled -->
+<style is:global>
   .player {
     position: absolute;
     width: 56px; height: 56px;
@@ -88,29 +87,32 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
   </div>
 </div>
 
-<script is:inline>
-(function(){
-  console.log("CourtDemo mounted");
-  const root = document.getElementById('${uid}');
-  if (!root) {
-    console.log("Didn't find root ");
-    return;
-  } else {
-    console.log("Found root");
-  }
+<!-- Inject frontmatter vars into inline script -->
+<script is:inline define:vars={{ uid }}>
+/* Small helper: retry across a few frames until the element is mounted */
+function findRoot(id, tries = 6) {
+  const node = document.getElementById(id);
+  if (node || tries <= 0) return Promise.resolve(node);
+  return new Promise(res => requestAnimationFrame(() => res(findRoot(id, tries - 1))));
+}
+
+requestAnimationFrame(async () => {
+  const __COURT_UID__ = uid; // provided by define:vars ✅
+  const root = await findRoot(__COURT_UID__, 6);
+  if (!root) { console.error("CourtDemo: root not found", __COURT_UID__); return; }
 
   const court = root.querySelector('.court');
   const resetBtn = root.querySelector('.fab');
-  if (!court || !resetBtn) return;
+  if (!court || !resetBtn) { console.error("CourtDemo: court/resetBtn missing"); return; }
 
   // --- Geometry helpers ---
   const PADDING = 20, size = 56, gapY = 24, gapX = 24;
+
   const W = () => court.clientWidth;
   const H = () => court.clientHeight;
   const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
   // --- Players & constraints ---
-  // Bottom team shows 1..6; Top team also shows 1..6 but IDs 11..16
   const players = {
     1:{id:1,label:'RB',team:'bottom'}, 2:{id:2,label:'RF',team:'bottom'}, 3:{id:3,label:'MF',team:'bottom'},
     4:{id:4,label:'LF',team:'bottom'}, 5:{id:5,label:'LB',team:'bottom'}, 6:{id:6,label:'MB',team:'bottom'},
@@ -118,9 +120,8 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
     14:{id:14,label:'LF',team:'top'}, 15:{id:15,label:'LB',team:'top'}, 16:{id:16,label:'MB',team:'top'}
   };
 
-  // dir +1 = bottom team perspective; dir -1 = top (mirrored)
   const constraints = [
-    // Bottom: back behind front; lateral right-of order within row
+    // Bottom
     { a:1, b:2, type:'behind', dir:+1 }, { a:6, b:3, type:'behind', dir:+1 }, { a:5, b:4, type:'behind', dir:+1 },
     { a:1, b:6, type:'rightOf', dir:+1 }, { a:6, b:5, type:'rightOf', dir:+1 }, { a:2, b:3, type:'rightOf', dir:+1 }, { a:3, b:4, type:'rightOf', dir:+1 },
     // Top mirrored
@@ -137,7 +138,7 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
     el.setAttribute('role', 'button');
     el.setAttribute('aria-grabbed', 'false');
     el.dataset.pid = id;
-    const shown = p.team === 'top' ? (p.id - 10) : p.id; // display 1..6 both sides
+    const shown = p.team === 'top' ? (p.id - 10) : p.id; // show 1..6 both sides
     el.innerHTML = '<div class="num">'+shown+'</div><div class="lab">'+p.label+'</div>';
     court.appendChild(el);
     els[id] = el;
@@ -163,6 +164,7 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
 
   // --- Constraint solver ---
   function satisfyAll(maxIters = 28){
+    console.log('called');
     for (let k = 0; k < maxIters; k++) {
       let any = false;
       for (const c of constraints) {
@@ -175,7 +177,7 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
               const newAy = clamp(B.y + gapY, halfMinY(players[c.a].team), halfMaxY(players[c.a].team));
               if (newAy !== A.y) { setPos(c.a, A.x, newAy); any = true; }
             }
-          } else { // dir -1
+          } else {
             if (A.y > B.y - gapY) {
               const newBy = clamp(A.y + gapY, halfMinY(players[c.b].team), halfMaxY(players[c.b].team));
               if (newBy !== B.y) { setPos(c.b, B.x, newBy); any = true; continue; }
@@ -184,14 +186,14 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
             }
           }
         } else if (c.type === 'rightOf') {
-          if (c.dir === +1) { // A right of B
+          if (c.dir === +1) {
             if (A.x < B.x + gapX) {
               const newBx = clamp(A.x - gapX, PADDING, W() - PADDING - size);
               if (newBx !== B.x) { setPos(c.b, newBx, B.y); any = true; continue; }
               const newAx = clamp(B.x + gapX, PADDING, W() - PADDING - size);
               if (newAx !== A.x) { setPos(c.a, newAx, A.y); any = true; }
             }
-          } else {           // A left of B (mirrored)
+          } else {
             if (A.x > B.x - gapX) {
               const newBx = clamp(A.x + gapX, PADDING, W() - PADDING - size);
               if (newBx !== B.x) { setPos(c.b, newBx, B.y); any = true; continue; }
@@ -204,29 +206,73 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
       if (!any) break;
     }
   }
+  let guides;
+function showGuides(on = true){
+  if (!on) { guides?.remove(); guides = null; return; }
+  if (guides) return;
+  guides = document.createElement('div');
+  guides.style.cssText = 'position:absolute;inset:0;pointer-events:none;';
+  const net = document.createElement('div');
+  net.style.cssText = `position:absolute;left:${PADDING}px;right:${PADDING}px;top:${H()/2}px;height:0;border-top:1px dashed #000`;
+  const box = document.createElement('div');
+  box.style.cssText = `position:absolute;left:${PADDING}px;right:${PADDING}px;top:${PADDING}px;bottom:${PADDING}px;border:1px dashed rgba(0,0,0,.35)`;
+  guides.appendChild(net);
+  guides.appendChild(box);
+  court.appendChild(guides);
+}
+window.addEventListener('keydown', e => {
+  if (e.key.toLowerCase() === 'g') showGuides(!guides);
+});
 
   // --- Initial layout (symmetric, mirrored) ---
-  function resetPositions(){
-    console.log('Reset');
-    const w = W() - PADDING*2 - size;
-    const half = H()/2;
-    const colL = PADDING + 60;
-    const colM = PADDING + w/2 - 16;
-    const colR = W() - PADDING - 60 - size;
+function lerp(a,b,t){ return a + (b - a) * t; }
 
-    const botFrontY = half + 40,  botBackY = half + 160;
-    const topFrontY = half - 40 - size, topBackY = half - 160 - size;
+const AUTO_SOLVE = true;
+function resetPositions(){
+  // Logs stay so we can see what reset is using
+  console.table({ W: W(), H: H(), PADDING, netY: H()/2 });
 
-    // Bottom (left→center→right)
-    setPos(4, colL, botFrontY); setPos(3, colM, botFrontY); setPos(2, colR, botFrontY);
-    setPos(5, colL, botBackY ); setPos(6, colM, botBackY ); setPos(1, colR, botBackY );
+  const netY = H()/2;                          // same as CSS .net (top:50%)
+  const left  = PADDING;
+  const right = W() - PADDING - size;
 
-    // Top mirrored (left→center→right visually)
-    setPos(12, colL, topFrontY); setPos(13, colM, topFrontY); setPos(14, colR, topFrontY);
-    setPos(11, colL, topBackY ); setPos(16, colM, topBackY ); setPos(15, colR, topBackY );
+  // Columns evenly across the playable width
+  const colL = lerp(left, right, 0.15);
+  const colM = lerp(left, right, 0.50);
+  const colR = lerp(left, right, 0.85);
 
-    satisfyAll();
-  }
+  // Row offsets from the net (down is +Y)
+  const FRONT_OFF = 40;
+  const BACK_OFF  = 160;
+
+  // Bottom (below net)
+  const botFrontY = netY + 2 + FRONT_OFF;
+  const botBackY  = netY + 2 + BACK_OFF;
+
+  // Top (above net) – subtract size so the tokens sit fully above the line
+  const topFrontY = netY - size - 2 - FRONT_OFF;
+  const topBackY  = netY - size - 2 - BACK_OFF;
+
+  // Place: left → center → right
+  // Bottom
+  setPos(4, colL, botFrontY); setPos(3, colM, botFrontY); setPos(2, colR, botFrontY);
+  setPos(5, colL, botBackY ); setPos(6, colM, botBackY ); setPos(1, colR, botBackY );
+
+  // Top (mirrored visually)
+  setPos(12, colL, topFrontY); setPos(13, colM, topFrontY); setPos(14, colR, topFrontY);
+  setPos(11, colL, topBackY ); setPos(16, colM, topBackY ); setPos(15, colR, topBackY );
+
+  satisfyAll();
+
+}
+
+/*
+function dump(id){ const el = els[id]; console.log(id, el.dataset.x, el.dataset.y); }
+dump(4); dump(3); dump(2);
+dump(5); dump(6); dump(1);
+dump(12); dump(13); dump(14);
+dump(11); dump(16); dump(15);
+*/
 
   // --- Dragging ---
   let dragging = null, offset = { x:0, y:0 };
@@ -268,12 +314,11 @@ const uid = `court-${Math.random().toString(36).slice(2, 10)}`;
 
     resetBtn.addEventListener('click', resetPositions);
 
-    // Reflow on element size changes (more reliable than window.resize)
     const ro = new ResizeObserver(() => requestAnimationFrame(resetPositions));
     ro.observe(court);
   }
 
   resetPositions();
   attach();
-})();
+});
 </script>

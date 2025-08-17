@@ -2,6 +2,7 @@
 title: 'Workflow Tricks with Claude + Github'
 description: 'Practical tips and tricks for maximizing productivity when working with Claude AI in your development workflow'
 pubDate: 2025-07-29
+heroImage: '../../assets/blog/claude-code-github.png'
 ---
 
 Working with Claude AI can dramatically improve your development workflow when you know the right tricks. Here are some practical techniques I've discovered for getting the most out of AI-assisted coding.
