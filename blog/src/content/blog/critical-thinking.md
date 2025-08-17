@@ -1,5 +1,5 @@
 ---
-title: 'On marketing and critical thinking'
+title: 'On marketing + critical thinking'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 17 2025'
 heroImage: '../../assets/blog/don-draper-hero.jpg'
