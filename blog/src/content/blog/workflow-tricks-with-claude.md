@@ -5,57 +5,33 @@ pubDate: 2025-07-29
 heroImage: '../../assets/blog/claude-code-github.png'
 ---
 
-Working with Claude AI can dramatically improve your development workflow when you know the right tricks. Here are some practical techniques I've discovered for getting the most out of AI-assisted coding.
+## Two Modes of Thinking in Development
 
-## Start with Context
+Before you get to the point of iterating with AI and GitHub, it’s worth going through a **deliberate design phase**: define components, tooling, dev stack, CI/CD, and maybe even sketch a monitoring strategy or roadmap. That foundation makes iteration smoother.  
 
-Before diving into specific requests, give Claude the big picture. Share your project structure, the technologies you're using, and what you're trying to accomplish. This upfront context leads to much better suggestions and fewer back-and-forth clarifications.
+But this post is less about that planning phase, and more about the next one:  
+**“I already have an app with the basics in place, now I need to iterate toward the real value proposition or market fit.”**
 
-## Break Down Complex Tasks
+When I’m in this stage, I notice two distinct modes of thinking:
 
-Instead of asking Claude to "build a complete authentication system," break it into smaller, focused requests:
+- **Big-picture, continuous deep thinking** – Where is this app headed? How does today’s feature connect to tomorrow’s roadmap? What shifts as I learn more about my users?  
+- **In-the-weeds execution** – Writing, debugging, QA’ing specific features and tests to make progress now.  
 
-- First, ask for the database schema design
-- Then request the API endpoints
-- Finally, tackle the frontend components
+Traditionally, these modes felt separate. Strategy was a different mindset than debugging a test suite.  
 
-This approach gives you more control and better results at each step.
+### How Agentic Coding Blurs the Modes
 
-## Use the Todo Feature
+With agentic coding tools like Claude Code, these two modes collapse closer together. That’s exciting—it feels like you can design and implement almost in the same breath. But the flip side is **over-ambition**: sometimes I push too far too quickly and have to backtrack.  
 
-Claude Code's todo functionality is incredibly powerful for tracking multi-step tasks. When you give Claude a complex request, it will often create a todo list to track progress. This keeps everything organized and ensures nothing gets missed.
+Claude, for example, can stumble in these scenarios:  
+- Generating **too much code** that needs cleanup.  
+- **Hitting context window limits** on premium models.  
+- Compressing early when I’m not ready, which derails the bigger thought process.  
 
-## Leverage Code References
+### My Workarounds
 
-When discussing specific functions or files, use the `file_path:line_number` format. This helps Claude understand exactly what you're referring to and provides clickable links for easy navigation.
+What helps is **offloading small issues without breaking flow**:
 
-## Iterative Refinement
-
-Don't expect perfection on the first try. Use Claude's ability to iterate and refine:
-
-1. Start with a basic implementation
-2. Ask for specific improvements
-3. Request optimizations or additional features
-4. Test and ask for bug fixes as needed
-
-## Ask for Explanations
-
-When Claude writes code you don't fully understand, ask for explanations. This helps you learn and makes you more effective at directing future changes.
-
-## Use Specific Examples
-
-Instead of saying "make it better," provide specific examples of what you want. Show Claude the current output and describe exactly how you want it to change.
-
-## Combine Tools Effectively
-
-Claude Code has access to many tools. Let it use them in combination - searching the codebase, reading files, making edits, and running tests all in sequence to accomplish complex tasks.
-
-## Review and Test
-
-Always review Claude's suggestions before implementing them. While Claude is incredibly capable, it's still important to understand and verify the code it generates, especially for critical functionality.
-
-## Keep Sessions Focused
-
-For best results, keep your Claude sessions focused on related tasks. If you're working on authentication, stick with that theme rather than jumping between unrelated features.
-
-These workflow patterns have made my development process much more efficient and enjoyable. The key is treating Claude as a highly capable pair programming partner rather than just a code generator.
+- If I find a small bug or gap that doesn’t impact the broader feature I’m building, I log it as a **GitHub issue** immediately. That way, I don’t lose momentum.  
+- Even better, I sometimes spin up a **secondary Claude session** just for that issue, keeping my main session focused on the bigger task.  
+- This keeps the deep context intact while still capturing the “little stuff” that can bog me down.  
