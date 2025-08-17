@@ -1,0 +1,283 @@
+---
+---
+
+<div class="demo-container">
+  <div id="court" class="court" aria-label="Full volleyball court with twelve movable players (two teams)">
+    <button id="resetFab" class="fab" title="Reset positions" aria-label="Reset positions">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6V3L8 7l4 4V8c2.76 0 5 2.24 5 5a5 5 0 0 1-9.9 1H5.02A7 7 0 0 0 19 13c0-3.87-3.13-7-7-7z"/></svg>
+      Reset
+    </button>
+    <div class="net"></div>
+  </div>
+</div>
+
+<style>
+  .demo-container {
+    margin: 2rem 0;
+  }
+  
+  .demo-container :global(*) {
+    box-sizing: border-box;
+  }
+
+  .court {
+    width: 760px;
+    height: 760px;
+    max-width: 100%;
+    aspect-ratio: 1;
+    background: #f6b080;
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.15), 0 30px 70px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+  }
+
+  .net {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: #0b5;
+  }
+
+  /* Floating action button (top-right inside court) */
+  .fab {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: #174e6d;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .fab:active {
+    transform: translateY(1px);
+  }
+
+  .fab svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .player {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: #11394f;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: grab;
+    user-select: none;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35),
+      inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+    transition: box-shadow 120ms ease;
+  }
+
+  .player:active {
+    cursor: grabbing;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45),
+      inset 0 0 0 2px rgba(255, 255, 255, 0.14);
+  }
+
+  .player.teamB {
+    background: #3a2b57;
+  }
+
+  .player .num {
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  .player .lab {
+    font-size: 11px;
+    opacity: 0.85;
+    margin-top: -4px;
+  }
+
+  @media (max-width: 960px) {
+    .court {
+      width: 100%;
+      height: 92vh;
+    }
+  }
+</style>
+
+<script>
+(function(){
+  const court = document.getElementById('court');
+  const resetBtn = document.getElementById('resetFab');
+  const PADDING = 20, size = 56, gapY = 24, gapX = 24;
+  const W = () => court.clientWidth, H = () => court.clientHeight;
+
+  // Players: bottom 1..6, top 11..16 (display 1..6 for both sides)
+  const players = {
+    1:{id:1,label:'RB',team:'bottom'}, 2:{id:2,label:'RF',team:'bottom'}, 3:{id:3,label:'MF',team:'bottom'}, 4:{id:4,label:'LF',team:'bottom'}, 5:{id:5,label:'LB',team:'bottom'}, 6:{id:6,label:'MB',team:'bottom'},
+    11:{id:11,label:'RB',team:'top'}, 12:{id:12,label:'RF',team:'top'}, 13:{id:13,label:'MF',team:'top'}, 14:{id:14,label:'LF',team:'top'}, 15:{id:15,label:'LB',team:'top'}, 16:{id:16,label:'MB',team:'top'}
+  };
+
+  // Constraints (bottom dir +1, top dir -1)
+  const constraints = [
+    { a:1, b:2, type:'behind', dir:+1 }, { a:6, b:3, type:'behind', dir:+1 }, { a:5, b:4, type:'behind', dir:+1 },
+    { a:1, b:6, type:'rightOf', dir:+1 }, { a:6, b:5, type:'rightOf', dir:+1 }, { a:2, b:3, type:'rightOf', dir:+1 }, { a:3, b:4, type:'rightOf', dir:+1 },
+    { a:11, b:12, type:'behind', dir:-1 }, { a:16, b:13, type:'behind', dir:-1 }, { a:15, b:14, type:'behind', dir:-1 },
+    { a:11, b:16, type:'rightOf', dir:-1 }, { a:16, b:15, type:'rightOf', dir:-1 }, { a:12, b:13, type:'rightOf', dir:-1 }, { a:13, b:14, type:'rightOf', dir:-1 }
+  ];
+
+  // Create DOM
+  const els = {};
+  for (const id of Object.keys(players)) {
+    const p = players[id];
+    const el = document.createElement('div');
+    el.className = 'player' + (p.team==='top' ? ' teamB' : '');
+    el.setAttribute('role','button');
+    el.setAttribute('aria-grabbed','false');
+    el.dataset.pid = id;
+    // show 1..6 for both teams
+    const shown = p.team==='top' ? (p.id-10) : p.id;
+    el.innerHTML = `<div class="num">${shown}</div><div class="lab">${p.label}</div>`;
+    court.appendChild(el);
+    els[id] = el;
+  }
+
+  // Helpers
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+  function halfMinY(team){ return team==='top' ? PADDING : (H()/2 + 2); }
+  function halfMaxY(team){ return team==='top' ? (H()/2 - size - 2) : (H() - PADDING - size); }
+
+  function setPos(id, x, y){
+    const team = players[id].team;
+    const cx = clamp(x, PADDING, W()-PADDING-size);
+    const cy = clamp(y, halfMinY(team), halfMaxY(team));
+    const el = els[id];
+    el.dataset.x = cx; el.dataset.y = cy;
+    el.style.transform = `translate(${cx}px, ${cy}px)`;
+  }
+  function getPos(id){ const el = els[id]; return { x: parseFloat(el.dataset.x||'0'), y: parseFloat(el.dataset.y||'0') }; }
+
+  // Initial symmetric spread
+  function resetPositions(){
+    const w = W()-PADDING*2-size;
+    const half = H()/2;
+    const colL = PADDING + 60;
+    const colM = PADDING + w/2 - 16;
+    const colR = W() - PADDING - 60 - size;
+    const botFrontY = half + 40, botBackY = half + 160;
+    const topFrontY = half - 40 - size, topBackY = half - 160 - size;
+
+    // Bottom (left→center→right)
+    setPos(4,colL,botFrontY); setPos(3,colM,botFrontY); setPos(2,colR,botFrontY);
+    setPos(5,colL,botBackY);  setPos(6,colM,botBackY);  setPos(1,colR,botBackY);
+
+    // Top mirrored x (left→center→right visually)
+    setPos(12,colL,topFrontY); setPos(13,colM,topFrontY); setPos(14,colR,topFrontY);
+    setPos(11,colL,topBackY);  setPos(16,colM,topBackY);  setPos(15,colR,topBackY);
+
+    satisfyAll();
+  }
+
+  // Constraint solver
+  function satisfyAll(maxIters=28){
+    for(let k=0;k<maxIters;k++){
+      let any=false;
+      for(const c of constraints){
+        const A=getPos(c.a), B=getPos(c.b);
+        if(c.type==='behind'){
+          if(c.dir===+1){ // A behind B: A.y >= B.y + gapY
+            if(A.y < B.y + gapY){
+              const newBy = clamp(A.y - gapY, halfMinY(players[c.b].team), halfMaxY(players[c.b].team));
+              if(newBy!==B.y){ setPos(c.b, B.x, newBy); any=true; continue; }
+              const newAy = clamp(B.y + gapY, halfMinY(players[c.a].team), halfMaxY(players[c.a].team));
+              if(newAy!==A.y){ setPos(c.a, A.x, newAy); any=true; }
+            }
+          } else { // dir -1: A.y <= B.y - gapY
+            if(A.y > B.y - gapY){
+              const newBy = clamp(A.y + gapY, halfMinY(players[c.b].team), halfMaxY(players[c.b].team));
+              if(newBy!==B.y){ setPos(c.b, B.x, newBy); any=true; continue; }
+              const newAy = clamp(B.y - gapY, halfMinY(players[c.a].team), halfMaxY(players[c.a].team));
+              if(newAy!==A.y){ setPos(c.a, A.x, newAy); any=true; }
+            }
+          }
+        } else if(c.type==='rightOf'){
+          if(c.dir===+1){ // A right of B: A.x >= B.x + gapX
+            if(A.x < B.x + gapX){
+              const newBx = clamp(A.x - gapX, PADDING, W()-PADDING-size);
+              if(newBx!==B.x){ setPos(c.b, newBx, B.y); any=true; continue; }
+              const newAx = clamp(B.x + gapX, PADDING, W()-PADDING-size);
+              if(newAx!==A.x){ setPos(c.a, newAx, A.y); any=true; }
+            }
+          } else { // dir -1: A left of B: A.x <= B.x - gapX
+            if(A.x > B.x - gapX){
+              const newBx = clamp(A.x + gapX, PADDING, W()-PADDING-size);
+              if(newBx!==B.x){ setPos(c.b, newBx, B.y); any=true; continue; }
+              const newAx = clamp(B.x - gapX, PADDING, W()-PADDING-size);
+              if(newAx!==A.x){ setPos(c.a, newAx, A.y); any=true; }
+            }
+          }
+        }
+      }
+      if(!any) break;
+    }
+  }
+
+  // Dragging
+  let dragging=null, offset={x:0,y:0};
+  function onPointerDown(e){
+    const el=e.currentTarget; dragging=el;
+    const rect=court.getBoundingClientRect();
+    const x=(e.clientX||e.touches?.[0]?.clientX)-rect.left;
+    const y=(e.clientY||e.touches?.[0]?.clientY)-rect.top;
+    offset.x = x - parseFloat(el.dataset.x||'0');
+    offset.y = y - parseFloat(el.dataset.y||'0');
+    el.setAttribute('aria-grabbed','true');
+    e.preventDefault();
+  }
+  function onPointerMove(e){
+    if(!dragging) return;
+    const rect=court.getBoundingClientRect();
+    const x=(e.clientX||e.touches?.[0]?.clientX)-rect.left - offset.x;
+    const y=(e.clientY||e.touches?.[0]?.clientY)-rect.top - offset.y;
+    const id = parseInt(dragging.dataset.pid,10);
+    setPos(id, x, y);
+    satisfyAll();
+  }
+  function onPointerUp(){ if(dragging) dragging.setAttribute('aria-grabbed','false'); dragging=null; }
+
+  // Attach events
+  for(const id of Object.keys(els)){
+    const el=els[id];
+    el.addEventListener('mousedown', onPointerDown);
+    el.addEventListener('touchstart', onPointerDown, {passive:false});
+  }
+  window.addEventListener('mousemove', onPointerMove, {passive:true});
+  window.addEventListener('touchmove', onPointerMove, {passive:false});
+  window.addEventListener('mouseup', onPointerUp);
+  window.addEventListener('touchend', onPointerUp);
+
+  // Reset button (FAB)
+  resetBtn.addEventListener('click', resetPositions);
+
+  // Resize (re-initialize layout for simplicity)
+  let resizeTimer=null;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(()=>{ resetPositions(); }, 80);
+  });
+
+  // Init
+  resetPositions();
+})();
+</script>

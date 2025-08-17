@@ -110,3 +110,4 @@ npm run build  # This will catch most errors
 - The project uses Astro's zero-JS approach by default - interactive components require explicit hydration directives
 - Content collection schemas are defined in `src/content/config.ts`
 - Static assets in the `public/` directory are served from the root URL path
+- remember these details when adding new images

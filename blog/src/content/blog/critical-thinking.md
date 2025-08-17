@@ -2,6 +2,7 @@
 title: 'On marketing and critical thinking'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 17 2025'
+heroImage: '../../assets/blog/don-draper-hero.jpg'
 ---
 
 I’m always surprised when talking with people about politics. Their opinions—which sometimes differ drastically from mine—aren’t what surprise me; it’s their certainty and confidence. Even when their views align with my own, I’m struck by how sure we can sound about systems we only dimly understand.
