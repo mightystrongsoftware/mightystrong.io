@@ -3,7 +3,7 @@ title: 'Net Metrics'
 description: 'A comprehensive analytics platform for tracking and improving volleyball player performance through data-driven insights.'
 category: 'Sports Analytics'
 technologies: ['Python', 'React', 'PostgreSQL', 'TensorFlow', 'D3.js']
-image: '/blog-placeholder-3.jpg'
+image: '/netmetrics.png'
 featured: true
 status: 'in-progress'
 startDate: 'Mar 10 2024'
@@ -84,9 +84,3 @@ Designing an interface that presents complex analytics in an intuitive way for c
 - Player recruitment marketplace
 - Coaching resource library
 - Peer benchmarking across programs
-
-## Impact Goals
-
-Net Metrics aims to democratize access to professional-level analytics for volleyball programs at all levels. By providing affordable, data-driven insights, we're helping coaches make better decisions and players reach their full potential.
-
-The platform is currently being piloted with three high school programs and one Division II college team, with plans to expand to youth clubs and international markets in 2025.
