@@ -178,3 +178,11 @@ ro.observe(root);
 ```js
 console.table({ W: root.clientWidth, H: root.clientHeight });
 	•	If logic works only after resize, the script is likely running before layout. Fix with requestAnimationFrame.
+- Development Procedures: Fixing broken images:
+
+Blog posts reference images in the /public/assets/img/ directory structure
+The original files can be found in /temp-repos/steipete.com/assets/img/
+Images must be copied to the matching public directory structure
+Fixed images should be committed to the repository
+Use find command to locate the original images
+Common image paths follow the pattern: /assets/img/YEAR/POST-NAME/IMAGE.jpg
