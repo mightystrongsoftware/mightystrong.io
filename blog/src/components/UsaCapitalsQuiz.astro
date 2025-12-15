@@ -36,9 +36,11 @@ const uid = `quiz-${Math.random().toString(36).slice(2, 10)}`;
 
       <label>State</label>
       <input class="stateInput" placeholder="e.g., Ohio" autocomplete="off" />
+      <datalist class="stateDatalist"></datalist>
 
       <label>Capital</label>
       <input class="capitalInput" placeholder="e.g., Columbus" autocomplete="off" />
+      <datalist class="capitalDatalist"></datalist>
 
       <div class="row" style="margin-top:12px;">
         <button class="primary submitBtn">Submit</button>
@@ -271,7 +273,17 @@ const uid = `quiz-${Math.random().toString(36).slice(2, 10)}`;
       restartBtn: root.querySelector(".restartBtn"),
       mapContainer: root.querySelector(".map-container"),
       regionSelect: root.querySelector(".regionSelect"),
+      stateDatalist: root.querySelector(".stateDatalist"),
+      capitalDatalist: root.querySelector(".capitalDatalist"),
     };
+
+    // Set unique IDs for datalists and connect to inputs
+    const stateListId = `${uid}-states`;
+    const capitalListId = `${uid}-capitals`;
+    ui.stateDatalist.id = stateListId;
+    ui.capitalDatalist.id = capitalListId;
+    ui.stateInput.setAttribute("list", stateListId);
+    ui.capitalInput.setAttribute("list", capitalListId);
 
     let allFeatures = []; // all 50 states
     let features = [];    // filtered by region
@@ -297,6 +309,36 @@ const uid = `quiz-${Math.random().toString(36).slice(2, 10)}`;
       ui.streak.textContent = String(streak);
     }
 
+    function updateAutocomplete() {
+      // Get states for current region
+      let regionStates;
+      if (selectedRegion === "all" || !REGIONS[selectedRegion]) {
+        regionStates = STATE_CAPITALS.map(([s]) => s);
+      } else {
+        regionStates = REGIONS[selectedRegion];
+      }
+
+      // Get capitals for those states
+      const regionCapitals = regionStates.map(state => {
+        const cap = stateToCapital.get(normalize(state));
+        return cap || "";
+      }).filter(Boolean);
+
+      // Sort alphabetically
+      regionStates.sort();
+      regionCapitals.sort();
+
+      // Populate state datalist
+      ui.stateDatalist.innerHTML = regionStates
+        .map(s => `<option value="${s}">`)
+        .join("");
+
+      // Populate capital datalist
+      ui.capitalDatalist.innerHTML = regionCapitals
+        .map(c => `<option value="${c}">`)
+        .join("");
+    }
+
     function filterFeaturesByRegion(region) {
       if (region === "all" || !REGIONS[region]) {
         return allFeatures;
@@ -317,6 +359,7 @@ const uid = `quiz-${Math.random().toString(36).slice(2, 10)}`;
       attempts = 0;
       streak = 0;
       updateScoreboard();
+      updateAutocomplete();
       zoomToRegion(selectedRegion);
       render();
       pickRandomState();
@@ -536,6 +579,7 @@ const uid = `quiz-${Math.random().toString(36).slice(2, 10)}`;
 
     async function init() {
       setStatus("Loading map…", "");
+      updateAutocomplete(); // Populate autocomplete immediately
       try {
         const topo = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(r => r.json());
         const geo = topojson.feature(topo, topo.objects.states);
@@ -566,7 +610,15 @@ const uid = `quiz-${Math.random().toString(36).slice(2, 10)}`;
     ui.regionSelect.addEventListener("change", onRegionChange);
 
     root.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") submit();
+      if (e.key === "Enter") {
+        // Only submit if both fields have values
+        if (ui.stateInput.value.trim() && ui.capitalInput.value.trim()) {
+          submit();
+        } else if (!ui.capitalInput.value.trim() && ui.stateInput.value.trim()) {
+          // If state is filled but capital is empty, focus capital
+          ui.capitalInput.focus();
+        }
+      }
     });
 
     init();
