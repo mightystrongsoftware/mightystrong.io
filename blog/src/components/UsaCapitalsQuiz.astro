@@ -1,0 +1,574 @@
+---
+const uid = `quiz-${Math.random().toString(36).slice(2, 10)}`;
+---
+
+<div id={uid} class="quiz-root">
+  <div class="wrap">
+    <div class="card mapWrap">
+      <h2>USA Map Quiz: States & Capitals</h2>
+      <div class="sub">
+        A state is highlighted. Type the <b>state name</b> and its <b>capital</b>, then submit.
+      </div>
+      <div class="map-container"></div>
+      <div class="legend">
+        <span><span class="swatch" style="background:#2a345c"></span>Other states</span>
+        <span><span class="swatch" style="background:#6aa6ff"></span>Current state</span>
+        <span><span class="swatch" style="background:#33d17a"></span>Correct (last)</span>
+        <span><span class="swatch" style="background:#ff6b6b"></span>Incorrect (last)</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;">
+        <div class="pill">Score: <span class="score">0</span> / <span class="attempts">0</span></div>
+        <div class="pill">Streak: <span class="streak">0</span></div>
+      </div>
+
+      <label>Region</label>
+      <select class="regionSelect">
+        <option value="all">All States (50)</option>
+        <option value="northeast">Northeast (9)</option>
+        <option value="midwest">Midwest (12)</option>
+        <option value="south">South (16)</option>
+        <option value="west">West (13)</option>
+        <option value="pacific-northwest">Pacific Northwest (3)</option>
+      </select>
+
+      <label>State</label>
+      <input class="stateInput" placeholder="e.g., Ohio" autocomplete="off" />
+
+      <label>Capital</label>
+      <input class="capitalInput" placeholder="e.g., Columbus" autocomplete="off" />
+
+      <div class="row" style="margin-top:12px;">
+        <button class="primary submitBtn">Submit</button>
+        <button class="revealBtn">Reveal</button>
+        <button class="skipBtn">Skip</button>
+        <button class="restartBtn">Restart</button>
+      </div>
+
+      <div class="status"></div>
+      <div class="sub" style="margin-top:12px;">
+        Tip: Press <span class="kbd">Enter</span> to submit.
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quiz-root {
+    --bg: #0b1020;
+    --card: #121a33;
+    --text: #e8ecff;
+    --muted: #aab3d6;
+    --good: #33d17a;
+    --bad: #ff6b6b;
+    --accent: #6aa6ff;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--text);
+  }
+  .wrap {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 16px;
+    padding: 16px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  }
+  h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    color: var(--text);
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  .row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 10px 0 6px;
+  }
+  input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: #0e1530;
+    color: var(--text);
+    outline: none;
+    box-sizing: border-box;
+  }
+  input:focus, select:focus {
+    border-color: rgba(106,166,255,0.6);
+    box-shadow: 0 0 0 4px rgba(106,166,255,0.15);
+  }
+  select {
+    cursor: pointer;
+  }
+  button {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: #0e1530;
+    color: var(--text);
+    cursor: pointer;
+  }
+  button:hover {
+    border-color: rgba(106,166,255,0.6);
+  }
+  button.primary {
+    background: rgba(106,166,255,0.15);
+    border-color: rgba(106,166,255,0.45);
+  }
+  .pill {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.14);
+    color: var(--muted);
+  }
+  .status {
+    margin-top: 10px;
+    font-size: 14px;
+    min-height: 20px;
+  }
+  .legend {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  .kbd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  @media (max-width: 900px) {
+    .wrap {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<style is:global>
+  .quiz-root .map-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  }
+  .quiz-root .status.good {
+    color: #33d17a;
+  }
+  .quiz-root .status.bad {
+    color: #ff6b6b;
+  }
+</style>
+
+<script is:inline define:vars={{ uid }}>
+  (async function() {
+    // Dynamically load D3 and TopoJSON
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        if (src.includes('d3') && window.d3) return resolve();
+        if (src.includes('topojson') && window.topojson) return resolve();
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    await loadScript("https://cdn.jsdelivr.net/npm/d3@7");
+    await loadScript("https://cdn.jsdelivr.net/npm/topojson-client@3");
+
+    const root = document.getElementById(uid);
+    if (!root) {
+      console.warn("Quiz root not found", uid);
+      return;
+    }
+
+    // 50 states + capitals
+    const STATE_CAPITALS = [
+      ["Alabama","Montgomery"],["Alaska","Juneau"],["Arizona","Phoenix"],["Arkansas","Little Rock"],
+      ["California","Sacramento"],["Colorado","Denver"],["Connecticut","Hartford"],["Delaware","Dover"],
+      ["Florida","Tallahassee"],["Georgia","Atlanta"],["Hawaii","Honolulu"],["Idaho","Boise"],
+      ["Illinois","Springfield"],["Indiana","Indianapolis"],["Iowa","Des Moines"],["Kansas","Topeka"],
+      ["Kentucky","Frankfort"],["Louisiana","Baton Rouge"],["Maine","Augusta"],["Maryland","Annapolis"],
+      ["Massachusetts","Boston"],["Michigan","Lansing"],["Minnesota","Saint Paul"],["Mississippi","Jackson"],
+      ["Missouri","Jefferson City"],["Montana","Helena"],["Nebraska","Lincoln"],["Nevada","Carson City"],
+      ["New Hampshire","Concord"],["New Jersey","Trenton"],["New Mexico","Santa Fe"],["New York","Albany"],
+      ["North Carolina","Raleigh"],["North Dakota","Bismarck"],["Ohio","Columbus"],["Oklahoma","Oklahoma City"],
+      ["Oregon","Salem"],["Pennsylvania","Harrisburg"],["Rhode Island","Providence"],["South Carolina","Columbia"],
+      ["South Dakota","Pierre"],["Tennessee","Nashville"],["Texas","Austin"],["Utah","Salt Lake City"],
+      ["Vermont","Montpelier"],["Virginia","Richmond"],["Washington","Olympia"],["West Virginia","Charleston"],
+      ["Wisconsin","Madison"],["Wyoming","Cheyenne"]
+    ];
+
+    // FIPS -> State name
+    const FIPS_TO_STATE = {
+      "01":"Alabama","02":"Alaska","04":"Arizona","05":"Arkansas","06":"California","08":"Colorado","09":"Connecticut","10":"Delaware",
+      "12":"Florida","13":"Georgia","15":"Hawaii","16":"Idaho","17":"Illinois","18":"Indiana","19":"Iowa","20":"Kansas","21":"Kentucky",
+      "22":"Louisiana","23":"Maine","24":"Maryland","25":"Massachusetts","26":"Michigan","27":"Minnesota","28":"Mississippi","29":"Missouri",
+      "30":"Montana","31":"Nebraska","32":"Nevada","33":"New Hampshire","34":"New Jersey","35":"New Mexico","36":"New York","37":"North Carolina",
+      "38":"North Dakota","39":"Ohio","40":"Oklahoma","41":"Oregon","42":"Pennsylvania","44":"Rhode Island","45":"South Carolina","46":"South Dakota",
+      "47":"Tennessee","48":"Texas","49":"Utah","50":"Vermont","51":"Virginia","53":"Washington","54":"West Virginia","55":"Wisconsin","56":"Wyoming"
+    };
+
+    // Region definitions (US Census regions)
+    const REGIONS = {
+      "all": null, // all states
+      "northeast": ["Connecticut", "Maine", "Massachusetts", "New Hampshire", "Rhode Island", "Vermont", "New Jersey", "New York", "Pennsylvania"],
+      "midwest": ["Illinois", "Indiana", "Michigan", "Ohio", "Wisconsin", "Iowa", "Kansas", "Minnesota", "Missouri", "Nebraska", "North Dakota", "South Dakota"],
+      "south": ["Delaware", "Florida", "Georgia", "Maryland", "North Carolina", "South Carolina", "Virginia", "West Virginia", "Alabama", "Kentucky", "Mississippi", "Tennessee", "Arkansas", "Louisiana", "Oklahoma", "Texas"],
+      "west": ["Arizona", "Colorado", "Idaho", "Montana", "Nevada", "New Mexico", "Utah", "Wyoming", "Alaska", "California", "Hawaii", "Oregon", "Washington"],
+      "pacific-northwest": ["Washington", "Oregon", "Idaho"]
+    };
+
+    // State name -> FIPS
+    const STATE_TO_FIPS = Object.fromEntries(Object.entries(FIPS_TO_STATE).map(([k,v]) => [v, k]));
+
+    const stateToCapital = new Map(STATE_CAPITALS.map(([s,c]) => [normalize(s), c]));
+    const capitalByState = new Map(STATE_CAPITALS.map(([s,c]) => [normalize(s), normalize(c)]));
+
+    const ui = {
+      score: root.querySelector(".score"),
+      attempts: root.querySelector(".attempts"),
+      streak: root.querySelector(".streak"),
+      status: root.querySelector(".status"),
+      stateInput: root.querySelector(".stateInput"),
+      capitalInput: root.querySelector(".capitalInput"),
+      submitBtn: root.querySelector(".submitBtn"),
+      revealBtn: root.querySelector(".revealBtn"),
+      skipBtn: root.querySelector(".skipBtn"),
+      restartBtn: root.querySelector(".restartBtn"),
+      mapContainer: root.querySelector(".map-container"),
+      regionSelect: root.querySelector(".regionSelect"),
+    };
+
+    let allFeatures = []; // all 50 states
+    let features = [];    // filtered by region
+    let current = null;
+    let selectedRegion = "all";
+    let lastResult = null;
+    let score = 0;
+    let attempts = 0;
+    let streak = 0;
+
+    function normalize(s) {
+      return (s ?? "").toString().trim().toLowerCase().replace(/\s+/g, " ");
+    }
+
+    function setStatus(msg, kind) {
+      ui.status.textContent = msg;
+      ui.status.className = "status " + (kind || "");
+    }
+
+    function updateScoreboard() {
+      ui.score.textContent = String(score);
+      ui.attempts.textContent = String(attempts);
+      ui.streak.textContent = String(streak);
+    }
+
+    function filterFeaturesByRegion(region) {
+      if (region === "all" || !REGIONS[region]) {
+        return allFeatures;
+      }
+      const regionStates = REGIONS[region];
+      const regionFips = regionStates.map(name => STATE_TO_FIPS[name]);
+      return allFeatures.filter(f => {
+        const id = String(f.id).padStart(2, "0");
+        return regionFips.includes(id);
+      });
+    }
+
+    function onRegionChange() {
+      selectedRegion = ui.regionSelect.value;
+      features = filterFeaturesByRegion(selectedRegion);
+      // Reset score when changing region
+      score = 0;
+      attempts = 0;
+      streak = 0;
+      updateScoreboard();
+      zoomToRegion(selectedRegion);
+      render();
+      pickRandomState();
+    }
+
+    function pickRandomState() {
+      if (!features.length) return;
+      const idx = Math.floor(Math.random() * features.length);
+      const f = features[idx];
+      const id = String(f.id).padStart(2, "0");
+      const name = FIPS_TO_STATE[id];
+      const cap = stateToCapital.get(normalize(name));
+      current = { id, name, capital: cap };
+      lastResult = null;
+      ui.stateInput.value = "";
+      ui.capitalInput.value = "";
+      setStatus("New state picked. What is it, and what's the capital?", "");
+      render();
+      ui.stateInput.focus();
+    }
+
+    function reveal() {
+      if (!current) return;
+      setStatus(`It was ${current.name}. Capital: ${current.capital}.`, "");
+      lastResult = "bad";
+      render();
+    }
+
+    function submit() {
+      if (!current) return;
+
+      const enteredState = normalize(ui.stateInput.value);
+      const enteredCapital = normalize(ui.capitalInput.value);
+      const correctState = normalize(current.name);
+      const correctCapital = capitalByState.get(correctState) || normalize(current.capital);
+
+      attempts += 1;
+
+      const stateOk = enteredState === correctState;
+      const capOk = enteredCapital === correctCapital;
+
+      if (stateOk && capOk) {
+        score += 1;
+        streak += 1;
+        lastResult = "good";
+        setStatus(`Correct! ${current.name} — ${current.capital}.`, "good");
+      } else {
+        streak = 0;
+        lastResult = "bad";
+        const want = `${current.name} — ${current.capital}`;
+        const got = `${ui.stateInput.value || "—"} — ${ui.capitalInput.value || "—"}`;
+        setStatus(`Not quite. You answered: ${got}. Correct: ${want}.`, "bad");
+      }
+
+      updateScoreboard();
+      render();
+      window.setTimeout(pickRandomState, 1100);
+    }
+
+    function skip() {
+      if (!current) return;
+      attempts += 1;
+      streak = 0;
+      lastResult = "bad";
+      updateScoreboard();
+      setStatus(`Skipped. It was ${current.name} — ${current.capital}.`, "");
+      render();
+      window.setTimeout(pickRandomState, 700);
+    }
+
+    function restart() {
+      score = 0;
+      attempts = 0;
+      streak = 0;
+      updateScoreboard();
+      pickRandomState();
+    }
+
+    // Map rendering
+    const width = 960;
+    const height = 600;
+    const padding = 40;
+
+    const svg = d3.select(ui.mapContainer)
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("aria-label", "Map of the United States");
+
+    const g = svg.append("g");
+
+    // Default projection for all states
+    const defaultProjection = d3.geoAlbersUsa()
+      .translate([width / 2, height / 2])
+      .scale(1200);
+
+    let projection = defaultProjection;
+    let path = d3.geoPath(projection);
+
+    function zoomToRegion(region) {
+      if (region === "all" || !REGIONS[region] || !allFeatures.length) {
+        // Reset to default view
+        projection = d3.geoAlbersUsa()
+          .translate([width / 2, height / 2])
+          .scale(1200);
+      } else {
+        // Get features for this region
+        const regionStates = REGIONS[region];
+        const regionFips = regionStates.map(name => STATE_TO_FIPS[name]);
+        const regionFeatures = allFeatures.filter(f => {
+          const id = String(f.id).padStart(2, "0");
+          return regionFips.includes(id);
+        });
+
+        if (regionFeatures.length > 0) {
+          // Create a new projection fitted to the region
+          // First, create a temporary projection to get the bounds
+          const tempProjection = d3.geoAlbersUsa()
+            .translate([width / 2, height / 2])
+            .scale(1200);
+          const tempPath = d3.geoPath(tempProjection);
+
+          // Calculate combined bounds of all region features
+          let bounds = [[Infinity, Infinity], [-Infinity, -Infinity]];
+          regionFeatures.forEach(f => {
+            const b = tempPath.bounds(f);
+            if (b[0][0] < bounds[0][0]) bounds[0][0] = b[0][0];
+            if (b[0][1] < bounds[0][1]) bounds[0][1] = b[0][1];
+            if (b[1][0] > bounds[1][0]) bounds[1][0] = b[1][0];
+            if (b[1][1] > bounds[1][1]) bounds[1][1] = b[1][1];
+          });
+
+          // Calculate scale and translate to fit
+          const dx = bounds[1][0] - bounds[0][0];
+          const dy = bounds[1][1] - bounds[0][1];
+          const x = (bounds[0][0] + bounds[1][0]) / 2;
+          const y = (bounds[0][1] + bounds[1][1]) / 2;
+          const scale = 0.9 / Math.max(dx / width, dy / height);
+          const translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+          // Apply transform to the group instead of changing projection
+          g.transition()
+            .duration(500)
+            .attr("transform", `translate(${translate[0]},${translate[1]}) scale(${scale})`);
+          return;
+        }
+      }
+      // Reset transform for "all" view
+      g.transition()
+        .duration(500)
+        .attr("transform", "");
+      path = d3.geoPath(projection);
+    }
+
+    function isInRegion(id) {
+      if (selectedRegion === "all") return true;
+      const regionStates = REGIONS[selectedRegion];
+      if (!regionStates) return true;
+      const regionFips = regionStates.map(name => STATE_TO_FIPS[name]);
+      return regionFips.includes(id);
+    }
+
+    function fillFor(feature) {
+      const id = String(feature.id).padStart(2, "0");
+      const inRegion = isInRegion(id);
+      if (current && id === current.id) return "#6aa6ff";
+      if (current && lastResult && id === current.id) {
+        return lastResult === "good" ? "#33d17a" : "#ff6b6b";
+      }
+      // Dim states outside the region
+      return inRegion ? "#2a345c" : "#151a2a";
+    }
+
+    function strokeFor(feature) {
+      const id = String(feature.id).padStart(2, "0");
+      const inRegion = isInRegion(id);
+      if (current && id === current.id) return "rgba(255,255,255,0.9)";
+      return inRegion ? "rgba(255,255,255,0.15)" : "rgba(255,255,255,0.05)";
+    }
+
+    function render() {
+      if (!allFeatures.length) return;
+
+      const states = g.selectAll("path.state")
+        .data(allFeatures, d => d.id);
+
+      states.enter()
+        .append("path")
+        .attr("class", "state")
+        .attr("d", path)
+        .attr("fill", fillFor)
+        .attr("stroke", strokeFor)
+        .attr("stroke-width", 1)
+        .on("click", (event, d) => {
+          const id = String(d.id).padStart(2, "0");
+          const name = FIPS_TO_STATE[id];
+          if (!name) return;
+          current = { id, name, capital: stateToCapital.get(normalize(name)) };
+          lastResult = null;
+          setStatus(`Clicked: ${name}. Now answer its name + capital.`, "");
+          ui.stateInput.value = "";
+          ui.capitalInput.value = "";
+          ui.stateInput.focus();
+          render();
+        })
+        .append("title")
+        .text(d => {
+          const id = String(d.id).padStart(2, "0");
+          return FIPS_TO_STATE[id] || `State ${id}`;
+        });
+
+      states
+        .attr("fill", fillFor)
+        .attr("stroke", strokeFor);
+
+      states.exit().remove();
+    }
+
+    async function init() {
+      setStatus("Loading map…", "");
+      try {
+        const topo = await fetch("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(r => r.json());
+        const geo = topojson.feature(topo, topo.objects.states);
+        allFeatures = geo.features;
+        features = filterFeaturesByRegion(selectedRegion);
+
+        const mesh = topojson.mesh(topo, topo.objects.states, (a, b) => a !== b);
+        g.append("path")
+          .datum(mesh)
+          .attr("fill", "none")
+          .attr("stroke", "rgba(255,255,255,0.25)")
+          .attr("stroke-width", 0.6)
+          .attr("d", path);
+
+        render();
+        pickRandomState();
+      } catch (err) {
+        console.error(err);
+        setStatus("Failed to load map. Please check your connection.", "bad");
+      }
+    }
+
+    // Events
+    ui.submitBtn.addEventListener("click", submit);
+    ui.revealBtn.addEventListener("click", reveal);
+    ui.skipBtn.addEventListener("click", skip);
+    ui.restartBtn.addEventListener("click", restart);
+    ui.regionSelect.addEventListener("change", onRegionChange);
+
+    root.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") submit();
+    });
+
+    init();
+  })();
+</script>
