@@ -2,7 +2,7 @@
 title: 'Building a Cross-Platform App in One Night with Agentic Engineering'
 description: 'How I shipped a Flutter scoreboard app to iOS, Android, Web, and macOS in a single late-night session using AI-assisted development.'
 pubDate: 'Dec 31 2025'
-heroImage: '/live-scoring-logo.png'
+heroImage: '../../assets/blog/live-scoring-logo.png'
 ---
 
 Last night I decided to scratch an itch: build a [simple volleyball scoreboard app](/projects/live-scoring). What started as "two numbers, tap to increment" turned into a cross-platform shipping exercise that revealed both the power of agentic engineering and the surprising complexity hiding in "simple" apps.
