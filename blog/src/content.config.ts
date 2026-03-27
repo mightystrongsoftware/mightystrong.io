@@ -34,4 +34,15 @@ const projects = defineCollection({
 	}),
 });
 
-export const collections = { blog, projects };
+const kidshw = defineCollection({
+	loader: glob({ base: './src/content/kidshw', pattern: '**/*.{md,mdx}' }),
+	schema: ({ image }) => z.object({
+		title: z.string(),
+		description: z.string(),
+		pubDate: z.coerce.date(),
+		updatedDate: z.coerce.date().optional(),
+		heroImage: image().optional(),
+	}),
+});
+
+export const collections = { blog, projects, kidshw };
