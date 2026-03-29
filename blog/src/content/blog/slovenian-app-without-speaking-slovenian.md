@@ -2,7 +2,7 @@
 title: "I Don't Speak Slovenian, So Naturally I Built a Slovenian Language App"
 description: 'How a fake Slovenian used AI agents and a content expert to build a language-learning app in a weekend without getting stuck in app store version hell.'
 pubDate: 'Mar 29 2026'
-heroImage: '/assets/img/naprej-logo.png'
+heroImage: '../../assets/blog/naprej-logo.png'
 ---
 
 ## My Slovenian Credentials
