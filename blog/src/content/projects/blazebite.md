@@ -5,9 +5,8 @@ category: 'Mobile & Web Development'
 technologies: ['iOS', 'Android', 'Flutter', 'Angular', 'TypeScript', 'Swift', 'Kotlin', 'Firebase', 'Stripe', 'Salesforce']
 image: '/blazebite-logo.png'
 featured: true
-status: 'completed'
+status: 'in-progress'
 startDate: 'Jun 15 2023'
-endDate: 'Aug 30 2024'
 link: 'https://www.blazebite.com'
 ---
 

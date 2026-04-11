@@ -5,7 +5,7 @@ category: 'iOS Development'
 technologies: ['Swift', 'iOS', 'WKWebView', 'WebKit']
 image: '/wkdevkit-logo.png'
 featured: true
-status: 'in-progress'
+status: 'completed'
 startDate: 'Sep 01 2024'
 github: 'https://github.com/devandanger/WKDevKit'
 ---
