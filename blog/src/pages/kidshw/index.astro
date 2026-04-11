@@ -4,11 +4,14 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE } from '../../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
-import { Image } from 'astro:assets';
 
-const posts = (await getCollection('kidshw')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+const items = (await getCollection('kidshw')).sort(
+	(a, b) => {
+		if (a.data.featured !== b.data.featured) {
+			return b.data.featured ? 1 : -1;
+		}
+		return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+	}
 );
 ---
 
@@ -21,68 +24,79 @@ const posts = (await getCollection('kidshw')).sort(
 				width: 960px;
 			}
 			ul {
-				display: flex;
-				flex-wrap: wrap;
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 				gap: 2rem;
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
 			}
 			ul li {
-				width: calc(50% - 1rem);
+				background: var(--gray-gradient);
+				border-radius: 8px;
+				padding: 1.5rem;
+				transition: transform 0.2s ease-in-out;
+			}
+			ul li:hover {
+				transform: translateY(-2px);
 			}
 			ul li * {
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
+			ul li .date {
 				margin: 0;
 				color: rgb(var(--gray));
+				font-size: 0.875rem;
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
+			ul li h4 {
+				margin: 0.5rem 0 0.25rem 0;
+				font-size: 1.25rem;
 			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
+			ul li p {
+				margin: 0.5rem 0 0 0;
+				color: rgb(var(--gray-dark));
+				line-height: 1.5;
 			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
+			.status {
+				display: inline-block;
+				padding: 0.25rem 0.5rem;
+				font-size: 0.75rem;
+				border-radius: 4px;
+				font-weight: 500;
+				margin-top: 0.5rem;
+			}
+			.status.completed {
+				background-color: #d4edda;
+				color: #155724;
+			}
+			.status.in-progress {
+				background-color: #fff3cd;
+				color: #856404;
+			}
+			.status.planned {
+				background-color: #d6d8db;
+				color: #495057;
+			}
+			.technologies {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin-top: 0.75rem;
+			}
+			.tech-tag {
+				background-color: rgb(var(--accent));
+				color: white;
+				padding: 0.125rem 0.5rem;
+				border-radius: 4px;
+				font-size: 0.75rem;
+			}
+			.item-image {
+				width: 100%;
+				height: 150px;
+				object-fit: cover;
+				border-radius: 4px;
+				margin-bottom: 0.5rem;
 			}
 		</style>
 	</head>
@@ -93,16 +107,34 @@ const posts = (await getCollection('kidshw')).sort(
 			<section>
 				<ul>
 					{
-						posts.map((post) => (
+						items.map((item) => (
 							<li>
-								<a href={`/kidshw/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
+								<a href={`/kidshw/${item.id}/`}>
+									{item.data.image && (
+										<img
+											class="item-image"
+											src={item.data.image}
+											alt={item.data.title}
+										/>
 									)}
-									<h4 class="title">{post.data.title}</h4>
 									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
+										Added: {item.data.startDate.toLocaleDateString('en-us', {
+											year: 'numeric',
+											month: 'short',
+										})}
 									</p>
+									<h4>{item.data.title}</h4>
+									<p>{item.data.description}</p>
+									<span class={`status ${item.data.status}`}>
+										{item.data.status.replace('-', ' ')}
+									</span>
+									{item.data.technologies && item.data.technologies.length > 0 && (
+										<div class="technologies">
+											{item.data.technologies.map((tech) => (
+												<span class="tech-tag">{tech}</span>
+											))}
+										</div>
+									)}
 								</a>
 							</li>
 						))

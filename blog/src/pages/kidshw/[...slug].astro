@@ -1,21 +1,129 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('kidshw');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
+	const items = await getCollection('kidshw');
+	return items.map((item) => ({
+		params: { slug: item.id },
+		props: item,
 	}));
 }
 type Props = CollectionEntry<'kidshw'>;
 
-const post = Astro.props;
-const { Content } = await render(post);
+const item = Astro.props;
+const { Content } = await render(item);
 ---
 
-<BlogPost {...post.data}>
-	<Content />
-</BlogPost>
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={item.data.title} description={item.data.description} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				padding: 1em 0;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: rgb(var(--gray));
+			}
+			.status {
+				display: inline-block;
+				padding: 0.25rem 0.75rem;
+				font-size: 0.875rem;
+				border-radius: 4px;
+				font-weight: 500;
+			}
+			.status.completed {
+				background-color: #d4edda;
+				color: #155724;
+			}
+			.status.in-progress {
+				background-color: #fff3cd;
+				color: #856404;
+			}
+			.status.planned {
+				background-color: #d6d8db;
+				color: #495057;
+			}
+			.technologies {
+				display: flex;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin: 1rem 0;
+			}
+			.tech-tag {
+				background-color: rgb(var(--accent));
+				color: white;
+				padding: 0.25rem 0.75rem;
+				border-radius: 4px;
+				font-size: 0.875rem;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="hero-image">
+					{item.data.image && <img width={1020} height={510} src={item.data.image} alt={item.data.title} />}
+				</div>
+				<div class="prose">
+					<div class="title">
+						<div class="date">
+							Added: {item.data.startDate.toLocaleDateString('en-us', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+							})}
+						</div>
+						<h1>{item.data.title}</h1>
+						<span class={`status ${item.data.status}`}>
+							{item.data.status.replace('-', ' ')}
+						</span>
+						{item.data.technologies && item.data.technologies.length > 0 && (
+							<div class="technologies">
+								{item.data.technologies.map((tech) => (
+									<span class="tech-tag">{tech}</span>
+								))}
+							</div>
+						)}
+					</div>
+					<Content />
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

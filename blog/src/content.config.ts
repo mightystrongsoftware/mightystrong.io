@@ -36,12 +36,15 @@ const projects = defineCollection({
 
 const kidshw = defineCollection({
 	loader: glob({ base: './src/content/kidshw', pattern: '**/*.{md,mdx}' }),
-	schema: ({ image }) => z.object({
+	schema: z.object({
 		title: z.string(),
 		description: z.string(),
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		heroImage: image().optional(),
+		category: z.string().optional(),
+		technologies: z.array(z.string()).optional(),
+		image: z.string().optional(),
+		featured: z.boolean().default(false),
+		status: z.enum(['completed', 'in-progress', 'planned']).default('in-progress'),
+		startDate: z.coerce.date(),
 	}),
 });
 
