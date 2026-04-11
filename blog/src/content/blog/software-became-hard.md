@@ -1,82 +1,64 @@
 ---
-title: "Software Became Hard — Now It's Becoming Soft Again"
+title: "Software Became Hard. Now It's Becoming Soft Again"
 description: "A short history of the word software and why its meaning is bending back to its origins"
 pubDate: 'Nov 28 2025'
 draft: false
 ---
 
-Most people never think about why we call it *software*.
-The name just feels... obvious.
+Most people never think about why we call it *software*. The name just feels obvious.
 
-But it wasn't obvious at all.
+But it wasn't.
 
-Supposedly, software started as a joke or a tongue-in-cheek contrast to *hardware*. This was because in 1958 nobody knew what to call this new invisible thing that told machines what to do. It wasn't mechanical. It wasn't physical. It wasn't something you could tighten with a wrench.
+The word reportedly started as a joke, a tongue-in-cheek contrast to *hardware*. In 1958, nobody knew what to call this new invisible thing that told machines what to do. It wasn't mechanical. It wasn't physical. You couldn't tighten it with a wrench.
 
 So they called it *soft*.
 
-Not soft like a pillow — soft like squishy, malleable, non-concrete, still-forming.
-It was the part of computing that was fluid, flexible, and easy to change.
+Not soft like a pillow. Soft like squishy, malleable, still-forming. It was the part of computing that was fluid, flexible, and easy to change.
 
 At least at first.
 
-## The Original Meaning: "Soft" as in Malleable
+## "Soft" as in Malleable
 
-When John Tukey used the word in 1958, the defining characteristic of this new phenomenon was:
+When John Tukey used the word in 1958, the defining characteristic of this new phenomenon was simple:
 
 - It wasn't fixed.
 - It wasn't permanent.
 - It was shapeable logic, not metal.
 
-Hardware was steel and silicon.
-Software was ideas and instructions.
+Hardware was steel and silicon. Software was ideas and instructions.
 
-The legacy metaphor is clear:
+Early software embodied that. It was easy to change. A small team could rewrite an entire system in weeks. A single engineer could transform an application overnight.
 
-- Hard things require fabrication.
-- Soft things can be altered, molded, and iterated.
+*Soft* was the whole point.
 
-Early software embodied this. It was easy to change.
-A small team could rewrite an entire system in weeks.
-A single engineer could transform an application overnight.
+## Then Software Started Eating the World
 
-*Soft* was the point.
-
-## But Then Something Unexpected Happened
-
-Software started eating the world.
-
-And when demand outgrew the simplicity of early codebases, the nature of software began to shift:
+And when demand outgrew the simplicity of early codebases, the nature of software shifted. Almost simultaneously across the industry:
 
 - Codebases grew larger than any one person could hold in their head.
-
-And then almost simulaneous in the industry.
-- Software Architectures emerged.
-- People managing parts of the architectures were needed.
-- Business architectures to coincide with software architectures coincided.
+- Software architectures emerged to manage the complexity.
+- People were needed to manage parts of those architectures.
+- Business structures grew to match software structures.
 - Teams expanded into roles: PMs, architects, designers, QA, analysts, scrum masters.
 - Releases required planning, alignment, ceremonies, and handoffs.
-- Changes became expensive.
-- Refactoring became risky.
+- Changes became expensive. Refactoring became risky.
 - The business depended more and more on digital systems that couldn't break.
-- To procure the investments in these expenses extra planning, meetings were needed.
+- To justify the investment, more planning, more meetings.
 
-Software became... *hard*.
+Software became *hard*.
 
-Hard because of its size.
-Hard because of the coordination needed.
-Hard because of the scarcity of people who could work on it.
-Hard because of the cost of getting it wrong.
+Hard because of its size. Hard because of the coordination needed. Hard because of the scarcity of people who could work on it. Hard because of the cost of getting it wrong.
 
-The irony...
+The irony is hard to miss:
 
 > We named it "software" for its flexibility,
 > then built an industry that made it rigid.
 
 The cost of change rose so high that software felt more like architecture than clay.
 
-## The Agentic Shift: Software Is Becoming Soft Again
+## Software Is Becoming Soft Again
 
-Enter agentic programming.  IMO the most significant shift in software production since the compiler even more so then the cloud and whatever else.
+Agentic programming is, in my opinion, the most significant shift in software production since the compiler. More than the cloud, more than whatever else we've hyped over the years.
 
 Now:
 
@@ -87,24 +69,15 @@ Now:
 - Ideas can be explored before meetings even happen.
 - A single engineer can produce what once required a team.
 
-Feels like we are moving back to the idea of software being much more malleable.
+It feels like we're moving back to software being malleable.
 
-Back to:
+Back to trying ideas quickly. Reshaping systems rapidly. Evolving designs continuously. Bending the system instead of negotiating with it.
 
-- trying ideas quickly
-- reshaping systems rapidly
-- evolving designs continuously
-- bending the system instead of negotiating with it
-
-The constraints that once made software hard seem to be dissolving:
+The constraints that made software hard are dissolving:
 
 - Team coordination overhead shrinks.
-- The cost of iteration drops dramatically.
+- The cost of iteration drops.
 - The danger of change is mitigated by intelligent tooling.
-- Agents can handle the drudgery, letting humans shape ideas again.
+- Agents handle the drudgery, letting humans shape ideas again.
 
-Software is returning to the fluidity it was named for.
-
-With agentic tools, software is once again something you can mold, bend, reshape, and regenerate with ease.
-
-In other words, it feels like it is becoming *soft* again.
+Software is returning to the fluidity it was named for. It's becoming *soft* again.
