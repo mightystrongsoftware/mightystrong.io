@@ -23,7 +23,7 @@ For many debugging scenarios, especially when testing in the field or with non-t
 
 ## Enter WKDevKit
 
-WKDevKit is my attempt to bridge this gap—a lightweight iOS toolkit that implements Safari DevTools features directly within your app. No external connections, no desktop Safari, just immediate debugging capabilities at your fingertips.
+WKDevKit is my attempt to bridge this gap, a lightweight iOS toolkit that implements Safari DevTools features directly within your app. No external connections, no desktop Safari, just immediate debugging capabilities at your fingertips.
 
 ## Feature Parity Analysis
 
@@ -128,4 +128,4 @@ WKDevKit is open source and available on [GitHub](https://github.com/devandanger
 
 While we can't achieve 100% parity with Safari's Web Inspector due to sandboxing and security constraints, WKDevKit demonstrates that we can bring substantial debugging capabilities directly into iOS apps. For developers working with `WKWebView`, especially in UIKit-based applications, this toolkit offers a practical solution to everyday debugging challenges.
 
-The journey of building WKDevKit has reinforced my belief that developer tools should meet developers where they are—in this case, right on the device where issues occur. Sometimes the best debugging tool is the one that's immediately available when you need it.
+The journey of building WKDevKit has reinforced my belief that developer tools should meet developers where they are, in this case right on the device where issues occur. Sometimes the best debugging tool is the one that's immediately available when you need it.

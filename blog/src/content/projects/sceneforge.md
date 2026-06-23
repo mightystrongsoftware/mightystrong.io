@@ -1,6 +1,6 @@
 ---
 title: 'SceneForge'
-description: 'A local-first CLI for building repeatable, branded short-form marketing videos from a single JSON file — designed so agents can generate and repair videos while humans can still read, tweak, and render them.'
+description: 'A local-first CLI for building repeatable, branded short-form marketing videos from a single JSON file, designed so agents can generate and repair videos while humans can still read, tweak, and render them.'
 category: 'Developer Tool'
 technologies: ['TypeScript', 'Node.js', 'Remotion', 'Zod', 'CLI', 'ElevenLabs']
 featured: true
@@ -11,7 +11,7 @@ github: 'https://github.com/devandanger/sceneforge'
 
 ## What is SceneForge?
 
-SceneForge is a local-first, JSON-driven video builder for repeatable branded short-form marketing videos. You describe a video in a single readable file — `video.json` — and SceneForge handles the rendering with [Remotion](https://www.remotion.dev), so you never have to learn a timeline editor or understand video internals.
+SceneForge is a local-first, JSON-driven video builder for repeatable branded short-form marketing videos. You describe a video in a single readable file, `video.json`, and SceneForge handles the rendering with [Remotion](https://www.remotion.dev), so you never have to learn a timeline editor or understand video internals.
 
 ```sh
 npm install -g sceneforge          # or: npx sceneforge <command>
@@ -24,23 +24,23 @@ The whole tool is organized around one contract: `video.json`. That single decis
 
 ## Built for agents
 
-SceneForge is designed so an agent can pick it up cold — no static docs required — and safely generate or repair a video:
+SceneForge is designed so an agent can pick it up cold, with no static docs required, and safely generate or repair a video:
 
 - **Self-describing.** A workflow can bootstrap the entire tool from two commands: `sceneforge capabilities --json` reports every command, flag, env var, and whether it's agent-safe; `sceneforge schema --json` returns the full `video.json` data contract.
-- **Documented at the field level.** Every schema field carries a Zod `.describe()`, and CI fails if a description is missing — so `schema --json` is always complete.
+- **Documented at the field level.** Every schema field carries a Zod `.describe()`, and CI fails if a description is missing, so `schema --json` is always complete.
 - **Machine-readable output.** `validate`, `render`, and `tts` all accept `--json`, emitting a single clean object to stdout while human logs and Remotion's render noise go to stderr.
 - **Errors agents can act on.** Validation failures include the JSON path that failed, so a generating agent can correct the exact field and retry.
 - **Source-control friendly.** Assets are local and relative to `video.json`, so generated projects commit cleanly.
 
 ## Built for humans, too
 
-- You edit a readable JSON file — not a binary project or a timeline.
+- You edit a readable JSON file, not a binary project or a timeline.
 - You run simple commands: `validate`, `preview`, `render`.
 - The schema keeps options constrained: enums, percentages, colors, and local paths instead of arbitrary CSS, so it's hard to make an unrenderable mess.
-- Examples cover common patterns: no-AI videos, product launches, overlays, captions, and themes — each one doubles as a smoke test.
+- Examples cover common patterns: no-AI videos, product launches, overlays, captions, and themes, and each one doubles as a smoke test.
 - Remotion does the hard rendering work behind the scenes.
 
-The core idea: **agents can safely generate and repair `video.json`, while humans can still read, tweak, preview, and render it** — neither side has to learn the other's tooling.
+The core idea: **agents can safely generate and repair `video.json`, while humans can still read, tweak, preview, and render it.** Neither side has to learn the other's tooling.
 
 ## How it stays honest
 
@@ -54,7 +54,7 @@ Voiceover generation uses ElevenLabs (`ELEVENLABS_API_KEY`, `ELEVENLABS_DEFAULT_
 
 ## Why I built it
 
-SceneForge came out of building [Naprej](/projects/naprej/). The coding was never the hard part — the hard part was producing the marketing content around the product. I wrote about that realization, and why I went looking for something I could drive agentically, in [a blog post](/blog/why-i-built-sceneforge/).
+SceneForge came out of building [Naprej](/projects/naprej/). The coding was never the hard part. The hard part was producing the marketing content around the product. I wrote about that realization, and why I went looking for something I could drive agentically, in [a blog post](/blog/why-i-built-sceneforge/).
 
 ---
 

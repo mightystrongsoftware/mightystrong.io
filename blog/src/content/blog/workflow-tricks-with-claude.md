@@ -14,14 +14,14 @@ But this post is less about that planning phase, and more about the next one:
 
 When I’m in this stage, I notice two distinct modes of thinking:
 
-- **Big-picture, continuous deep thinking** – Where is this app headed? How does today’s feature connect to tomorrow’s roadmap? What shifts as I learn more about my users?  
-- **In-the-weeds execution** – Writing, debugging, QA’ing specific features and tests to make progress now.  
+- **Big-picture, continuous deep thinking:** Where is this app headed? How does today’s feature connect to tomorrow’s roadmap? What shifts as I learn more about my users?  
+- **In-the-weeds execution:** Writing, debugging, QA’ing specific features and tests to make progress now.  
 
 Traditionally, these modes felt separate. Strategy was a different mindset than debugging a test suite.  
 
 ### How Agentic Coding Blurs the Modes
 
-With agentic coding tools like Claude Code, these two modes collapse closer together. That’s exciting—it feels like you can design and implement almost in the same breath. But the flip side is **over-ambition**: sometimes I push too far too quickly and have to backtrack.  
+With agentic coding tools like Claude Code, these two modes collapse closer together. That’s exciting. It feels like you can design and implement almost in the same breath. But the flip side is **over-ambition**: sometimes I push too far too quickly and have to backtrack.  
 
 Claude, for example, can stumble in these scenarios:  
 - Generating **too much code** that needs cleanup.  

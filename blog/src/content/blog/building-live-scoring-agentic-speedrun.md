@@ -7,7 +7,7 @@ heroImage: '../../assets/blog/live-scoring-logo.png'
 
 Last night I decided to scratch an itch: build a [simple volleyball scoreboard app](/projects/live-scoring). What started as "two numbers, tap to increment" turned into a cross-platform shipping exercise that revealed both the power of agentic engineering and the surprising complexity hiding in "simple" apps.
 
-By morning, [Live Scoring](https://scoring.netmetrics.cloud) was in review on the App Store, installable as a PWA, and running natively on macOS—all from a single Flutter codebase.
+By morning, [Live Scoring](https://scoring.netmetrics.cloud) was in review on the App Store, installable as a PWA, and running natively on macOS, all from a single Flutter codebase.
 
 ## The Agentic Engineering Approach
 
@@ -28,10 +28,10 @@ Each of these spawned technical challenges that would have taken hours to resear
 ## Challenge 1: PWA Install Experience Across Platforms
 
 ### The Android Way (Easy)
-Chrome on Android automatically prompts users to install PWAs that meet the criteria—512×512 icon, `display: "standalone"` in manifest, valid `start_url`. No custom code needed.
+Chrome on Android automatically prompts users to install PWAs that meet the criteria: a 512×512 icon, `display: "standalone"` in manifest, and a valid `start_url`. No custom code needed.
 
 ### The iOS Way (Manual)
-Safari doesn't support the `beforeinstallprompt` event. Users must manually tap Share → "Add to Home Screen"—a flow most users don't know exists.
+Safari doesn't support the `beforeinstallprompt` event. Users must manually tap Share → "Add to Home Screen", a flow most users don't know exists.
 
 **Solution:** A custom install banner that only appears on iOS Safari:
 
@@ -111,7 +111,7 @@ MaterialApp(
 )
 ```
 
-Without `usePathUrlStrategy()`, direct navigation to `/privacy` would redirect to the home screen—a confusing bug that's easy to miss during development.
+Without `usePathUrlStrategy()`, direct navigation to `/privacy` would redirect to the home screen, a confusing bug that's easy to miss during development.
 
 ## Challenge 4: Gesture Layering
 
@@ -142,7 +142,7 @@ The 100 pixels/second threshold filters out accidental micro-swipes while remain
 
 ## Challenge 5: Orientation Locking
 
-Scoreboards need landscape orientation for visibility. Flutter makes this easy—but cleanup matters:
+Scoreboards need landscape orientation for visibility. Flutter makes this easy, but cleanup matters:
 
 ```dart
 @override
@@ -185,7 +185,7 @@ onLongPress: () {
 },
 ```
 
-`HapticFeedback` works on iOS and Android. On web, it silently no-ops—no conditional code needed.
+`HapticFeedback` works on iOS and Android. On web, it silently no-ops, with no conditional code needed.
 
 ## Challenge 7: Local Storage Strategy
 
@@ -233,7 +233,7 @@ What made this a one-night build instead of a one-week build? The AI caught plat
 
 Traditional development would have meant: build → test on iOS → discover the problem → research solutions → implement → test again. Instead, the solution came bundled with the initial implementation.
 
-This isn't about AI writing all the code—it's about compressing the research-and-discovery phase that dominates most development time.
+This isn't about AI writing all the code. It's about compressing the research-and-discovery phase that dominates most development time.
 
 ## The Result
 

@@ -23,9 +23,9 @@ The breakthrough (and I'm using that word loosely, because it's really just "the
 
 The editor now thinks in three parts:
 
-- **Content blocks** — own the meaningful content and its schema
-- **Layout blocks** — own position, width, height, z-order, hidden state, and lock state
-- **Page settings** — define the grid and document dimensions
+- **Content blocks** own the meaningful content and its schema
+- **Layout blocks** own position, width, height, z-order, hidden state, and lock state
+- **Page settings** define the grid and document dimensions
 
 Once those concerns were pulled apart, a ton of previously messy behavior started making sense. Serialization got cleaner. Undo/redo stopped being scary. Collision detection had a clear place to live. Print/export behavior stopped fighting with edit behavior.
 
@@ -37,9 +37,9 @@ For a while I kept treating "what fields can you edit" and "how does this block 
 
 I ended up splitting things into three parts:
 
-- **BlockSchema** — defines what content fields exist and how the property panel edits them
-- **BlockRegistry** — defines block identity, defaults, and layout defaults
-- **BlockRendererRegistry** — defines how blocks actually render visually
+- **BlockSchema** defines what content fields exist and how the property panel edits them
+- **BlockRegistry** defines block identity, defaults, and layout defaults
+- **BlockRendererRegistry** defines how blocks actually render visually
 
 Take a Questions block for teacher worksheets. That's domain-specific and shouldn't be hardcoded into the editor library. The library provides general rendering patterns, but the consuming app should own product-specific stuff like worksheet questions or fundraiser callouts.
 
@@ -64,7 +64,7 @@ The other use case is flyer and page composition for Blazebite. More promotional
 
 Those are pretty different domains. But the editor handles both because it cares about document structure, not domain-specific assumptions. That wasn't the plan from day one. It's just what happened when I kept peeling away the product-specific stuff and asking "what's actually the editor's job here?"
 
-![The page layout editor in action — block sidebar, page canvas with drag/resize, and property panel on the right](../../assets/blog/page-layout-editor-screenshot.png)
+![The page layout editor in action, with a block sidebar, a page canvas with drag and resize, and a property panel on the right](../../assets/blog/page-layout-editor-screenshot.png)
 
 ## Tests That Actually Helped
 

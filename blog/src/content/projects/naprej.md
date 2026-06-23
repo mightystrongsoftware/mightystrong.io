@@ -15,7 +15,7 @@ Naprej (meaning "forward" in Slovenian) is a mobile language-learning app built 
 
 ## Why Slovenian? Why Naprej?
 
-Slovenian is spoken by just over 2 million people, but it punches well above its weight. It's the only widely spoken European language that still uses the **dual grammatical number** — a special form just for pairs. It has one of the richest case systems among Slavic languages, verb aspect that reshapes how you think about actions, and a culture of warmth that rewards even the smallest effort to speak the local language.
+Slovenian is spoken by just over 2 million people, but it punches well above its weight. It's the only widely spoken European language that still uses the **dual grammatical number**, a special form just for pairs. It has one of the richest case systems among Slavic languages, verb aspect that reshapes how you think about actions, and a culture of warmth that rewards even the smallest effort to speak the local language.
 
 The problem? There are almost no quality apps for learning Slovenian. The major platforms either skip it entirely or offer machine-translated content that misses what makes the language tick. Naprej was built from the ground up for Slovenian, by people who understand its quirks and beauty.
 
@@ -23,26 +23,26 @@ The problem? There are almost no quality apps for learning Slovenian. The major 
 
 Naprej follows the **CEFR framework** (Common European Framework of Reference for Languages), the international standard for language proficiency:
 
-- **A1 (Beginner)** — 14 units covering greetings, introductions, numbers, food, travel, family, shopping, present tense, noun gender, and basic cases
-- **A2 (Elementary)** — 20 units covering past and future tense, daily routines, health, weather, directions, work, modal verbs, reflexive verbs, the dual number, genitive and dative cases, verb aspect, and more
+- **A1 (Beginner):** 14 units covering greetings, introductions, numbers, food, travel, family, shopping, present tense, noun gender, and basic cases
+- **A2 (Elementary):** 20 units covering past and future tense, daily routines, health, weather, directions, work, modal verbs, reflexive verbs, the dual number, genitive and dative cases, verb aspect, and more
 
-That's **34 units**, **102 lessons**, and over **600 vocabulary items** — all crafted with Slovenian-specific pedagogy in mind.
+That's **34 units**, **102 lessons**, and over **600 vocabulary items**, all crafted with Slovenian-specific pedagogy in mind.
 
 ### Each lesson takes about 5 minutes and includes:
 
-- **Grammar explanations** with clear tables, examples, and rule boxes — no jargon, just patterns you can use
-- **Varied exercises** — multiple choice, word matching, fill-in-the-blank, sentence building, and free translation, progressing from recognition to production
+- **Grammar explanations:** clear tables, examples, and rule boxes, with no jargon and just patterns you can use
+- **Varied exercises:** multiple choice, word matching, fill-in-the-blank, sentence building, and free translation, progressing from recognition to production
 - **Pronunciation guides** written for English speakers
-- **Memory tips** — mnemonics that actually stick ("Think of 'imam' like an imam who *has* a congregation")
-- **Spaced repetition vocabulary review** — the app tracks what you've learned and resurfaces words right before you'd forget them
+- **Memory tips:** mnemonics that actually stick ("Think of 'imam' like an imam who *has* a congregation")
+- **Spaced repetition vocabulary review:** the app tracks what you've learned and resurfaces words right before you'd forget them
 
 ## What Makes Naprej Different
 
-**Built for Slovenian, not adapted from Spanish.** The curriculum addresses what actually trips up English speakers learning Slovenian: the case system, verb aspect, dual number, formal vs. informal address (vikanje/tikanje), and gender agreement. These aren't afterthoughts — they're woven into the lesson progression from the start.
+**Built for Slovenian, not adapted from Spanish.** The curriculum addresses what actually trips up English speakers learning Slovenian: the case system, verb aspect, dual number, formal vs. informal address (vikanje/tikanje), and gender agreement. These aren't afterthoughts. They're woven into the lesson progression from the start.
 
 **Grammar taught in context, not in isolation.** You learn present tense verbs right after practicing common verbs in real phrases. You learn noun gender right before encountering adjectives that need to agree with it. The unit ordering is intentional.
 
-**Honest about complexity, gentle in delivery.** Slovenian has six grammatical cases. That sounds intimidating. Naprej introduces them gradually across both levels — accusative and locative at A1, then genitive and dative at A2 — with clear explanations and plenty of practice before moving on.
+**Honest about complexity, gentle in delivery.** Slovenian has six grammatical cases. That sounds intimidating. Naprej introduces them gradually across both levels (accusative and locative at A1, then genitive and dative at A2) with clear explanations and plenty of practice before moving on.
 
 ## Who Is It For?
 

@@ -58,7 +58,7 @@ This separation allows the same editor to serve different product domains withou
 Generated question sheets, classroom prompts, and structured printable learning materials. A system generates content, injects it into the document model, and lets a user arrange or refine it before printing.
 
 ### Marketing and Flyer Composition
-Page composition for promotional content — callouts, images, text blocks, and structured layouts that become printable or shareable materials.
+Page composition for promotional content: callouts, images, text blocks, and structured layouts that become printable or shareable materials.
 
 ### Any Angular App Needing a Layout Editor
 Any Angular application that needs a reusable block-and-layout document editor can integrate the library via npm.
