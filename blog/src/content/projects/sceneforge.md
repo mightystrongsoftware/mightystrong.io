@@ -3,6 +3,7 @@ title: 'SceneForge'
 description: 'A local-first CLI for building repeatable, branded short-form marketing videos from a single JSON file, designed so agents can generate and repair videos while humans can still read, tweak, and render them.'
 category: 'Developer Tool'
 technologies: ['TypeScript', 'Node.js', 'Remotion', 'Zod', 'CLI', 'ElevenLabs']
+image: '/assets/img/sceneforge-logo.png'
 featured: true
 status: 'in-progress'
 startDate: 2026-05-15
