@@ -1,7 +1,7 @@
 ---
 title: "Complexity Got Cheap"
 description: "For years we engineered around the fear of complexity. Agentic engineering changes the math, and it's time to stop flinching."
-pubDate: 'Jun 13 2026'
+pubDate: 'Dec 13 2025'
 draft: false
 ---
 
