@@ -57,7 +57,7 @@ A few things worth checking first:
 
 ## Privacy
 
-SongCue collects nothing. There are no servers and no analytics. Challenges and your profile live on your device, Apple Music access happens through Apple's MusicKit under your own subscription, and shared challenges travel inside the iMessage payload itself. Nothing about you leaves your phone except what you choose to send to a friend.
+SongCue collects nothing. There are no servers and no analytics. Challenges and your profile live on your device, Apple Music access happens through Apple's MusicKit under your own subscription, and shared challenges travel inside the iMessage payload itself. Nothing about you leaves your phone except what you choose to send to a friend. The full [SongCue privacy policy](/privacy/songcue/) has the details.
 
 ## Status
 
