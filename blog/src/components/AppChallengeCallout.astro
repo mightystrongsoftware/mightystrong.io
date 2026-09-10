@@ -7,10 +7,11 @@
 interface Props {
 	appName: string;
 	appStoreId: string;
-	param?: string;
+	/** Query parameters that identify a shared challenge link. */
+	params?: string[];
 }
 
-const { appName, appStoreId, param = 'p' } = Astro.props;
+const { appName, appStoreId, params = ['z', 'p'] } = Astro.props;
 const uid = `app-callout-${Math.random().toString(36).slice(2, 10)}`;
 const storeUrl = `https://apps.apple.com/app/id${appStoreId}`;
 ---
@@ -23,12 +24,12 @@ const storeUrl = `https://apps.apple.com/app/id${appStoreId}`;
 	<a class="app-callout-button" href={storeUrl}>Get {appName} on the App Store</a>
 </div>
 
-<script is:inline define:vars={{ uid, param }}>
+<script is:inline define:vars={{ uid, params }}>
 	requestAnimationFrame(() => {
 		const root = document.getElementById(uid);
 		if (!root) { console.warn('Root not found', uid); return; }
-		const params = new URLSearchParams(location.search);
-		if (params.has(param)) root.hidden = false;
+		const query = new URLSearchParams(location.search);
+		if (params.some((key) => query.has(key))) root.hidden = false;
 	});
 </script>
 

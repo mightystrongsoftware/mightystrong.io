@@ -4,7 +4,8 @@
       {
         "appIDs": ["Q7BEAG244J.com.mightystrong.heardle"],
         "components": [
-          { "/": "/projects/songcue/*", "?": { "p": "*" }, "comment": "SongCue challenge links carry the encoded challenge in the p parameter" }
+          { "/": "/projects/songcue/*", "?": { "z": "*" }, "comment": "SongCue challenge links, zlib-compressed payload" },
+          { "/": "/projects/songcue/*", "?": { "p": "*" }, "comment": "SongCue challenge links, legacy uncompressed payload" }
         ]
       }
     ]
