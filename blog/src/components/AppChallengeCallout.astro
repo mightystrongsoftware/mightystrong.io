@@ -1,0 +1,63 @@
+---
+/**
+ * Shown on a project page when a universal link lands in the browser instead of
+ * the app (i.e. the app is not installed). Detects the challenge parameter in the
+ * URL and prompts the visitor to install the app and re-open the link.
+ */
+interface Props {
+	appName: string;
+	appStoreId: string;
+	param?: string;
+}
+
+const { appName, appStoreId, param = 'p' } = Astro.props;
+const uid = `app-callout-${Math.random().toString(36).slice(2, 10)}`;
+const storeUrl = `https://apps.apple.com/app/id${appStoreId}`;
+---
+
+<div id={uid} class="app-callout" hidden>
+	<p class="app-callout-title">A friend sent you a {appName} challenge.</p>
+	<p>
+		Install {appName}, then tap the link in your message again and the challenge will open in the app.
+	</p>
+	<a class="app-callout-button" href={storeUrl}>Get {appName} on the App Store</a>
+</div>
+
+<script is:inline define:vars={{ uid, param }}>
+	requestAnimationFrame(() => {
+		const root = document.getElementById(uid);
+		if (!root) { console.warn('Root not found', uid); return; }
+		const params = new URLSearchParams(location.search);
+		if (params.has(param)) root.hidden = false;
+	});
+</script>
+
+<style>
+	.app-callout {
+		margin: 0 0 2rem;
+		padding: 1.25rem 1.5rem;
+		border: 2px solid var(--accent);
+		border-radius: 12px;
+		background: color-mix(in srgb, var(--accent) 6%, white);
+		text-align: center;
+	}
+	.app-callout p {
+		margin: 0 0 0.75rem;
+	}
+	.app-callout-title {
+		font-weight: 700;
+		font-size: 1.15em;
+	}
+	.app-callout-button {
+		display: inline-block;
+		padding: 0.6rem 1.25rem;
+		border-radius: 8px;
+		background: var(--accent);
+		color: white;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.app-callout-button:hover {
+		background: var(--accent-dark);
+	}
+</style>

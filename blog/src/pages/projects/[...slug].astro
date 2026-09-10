@@ -3,6 +3,7 @@ import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import AppChallengeCallout from '../../components/AppChallengeCallout.astro';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects');
@@ -174,6 +175,9 @@ const { Content } = await render(project);
 							)}
 						</div>
 					</div>
+					{project.data.appStoreId && (
+						<AppChallengeCallout appName={project.data.title} appStoreId={project.data.appStoreId} />
+					)}
 					<Content />
 				</div>
 			</article>

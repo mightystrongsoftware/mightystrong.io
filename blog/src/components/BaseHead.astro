@@ -51,7 +51,18 @@ const { title, description, image = FallbackImage, appStoreId } = Astro.props;
 
 <!-- iOS Smart App Banner: fallback for universal links when the app is not installed -->
 {appStoreId && (
-	<meta name="apple-itunes-app" content={`app-id=${appStoreId}, app-argument=${canonicalURL}`} />
+	<>
+		<meta name="apple-itunes-app" content={`app-id=${appStoreId}, app-argument=${canonicalURL}`} />
+		<script is:inline>
+			// Point the banner's app-argument at the full current URL so any query
+			// string (e.g. an encoded challenge) reaches the app when the user taps Open.
+			(function () {
+				var m = document.querySelector('meta[name="apple-itunes-app"]');
+				if (!m) return;
+				m.setAttribute('content', m.getAttribute('content').replace(/app-argument=.*$/, 'app-argument=' + location.href));
+			})();
+		</script>
+	</>
 )}
 
 <!-- Primary Meta Tags -->
