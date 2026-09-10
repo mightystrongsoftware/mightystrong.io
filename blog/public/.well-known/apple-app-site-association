@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["Q7BEAG244J.com.mightystrong.heardle"],
+        "components": [
+          { "/": "/projects/songcue/*", "comment": "SongCue product page and challenge links" }
+        ]
+      }
+    ]
+  }
+}

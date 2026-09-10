@@ -27,6 +27,8 @@ const projects = defineCollection({
 		link: z.string().url().optional(),
 		github: z.string().url().optional(),
 		image: z.string().optional(),
+		// App Store ID for the iOS Smart App Banner (universal link fallback)
+		appStoreId: z.string().optional(),
 		featured: z.boolean().default(false),
 		status: z.enum(['completed', 'in-progress', 'planned']).default('in-progress'),
 		startDate: z.coerce.date(),
