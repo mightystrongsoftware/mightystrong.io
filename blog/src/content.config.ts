@@ -19,7 +19,7 @@ const projects = defineCollection({
 	// Load Markdown and MDX files in the `src/content/projects/` directory.
 	loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
 	// Type-check frontmatter using a schema
-	schema: z.object({
+	schema: ({ image }) => z.object({
 		title: z.string(),
 		description: z.string(),
 		category: z.string().optional(),
@@ -27,6 +27,8 @@ const projects = defineCollection({
 		link: z.string().url().optional(),
 		github: z.string().url().optional(),
 		image: z.string().optional(),
+		// Open Graph preview image (1200x630) used when the project URL is shared
+		ogImage: image().optional(),
 		// App Store ID for the iOS Smart App Banner (universal link fallback)
 		appStoreId: z.string().optional(),
 		featured: z.boolean().default(false),

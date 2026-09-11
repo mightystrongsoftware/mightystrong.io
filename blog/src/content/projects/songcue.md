@@ -4,6 +4,7 @@ description: 'Turn Apple Music into a guessing game between friends: pick up to 
 category: 'Mobile App'
 technologies: ['Swift', 'SwiftUI', 'MusicKit', 'iMessage Extension', 'App Groups']
 image: '/assets/img/songcue-screenshot.png'
+ogImage: '../../assets/og-songcue.png'
 appStoreId: '6808849410'
 featured: true
 status: 'in-progress'
