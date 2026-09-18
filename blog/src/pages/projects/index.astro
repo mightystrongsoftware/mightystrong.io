@@ -13,6 +13,22 @@ const projects = (await getCollection('projects')).sort(
 		return b.data.startDate.valueOf() - a.data.startDate.valueOf();
 	}
 );
+
+// Misc: smaller side projects that live under their own listing pages.
+const kidshwItems = await getCollection('kidshw');
+const kidshwLatest = kidshwItems.reduce(
+	(latest, item) => (item.data.startDate > latest ? item.data.startDate : latest),
+	new Date(0)
+);
+const misc = [
+	{
+		href: '/kidshw/',
+		title: 'Kids HW',
+		description: 'Interactive quizzes and homework helpers for kids, built for my own kids to practice with.',
+		count: `${kidshwItems.length} ${kidshwItems.length === 1 ? 'activity' : 'activities'}`,
+		updated: kidshwLatest,
+	},
+];
 ---
 
 <!doctype html>
@@ -98,6 +114,17 @@ const projects = (await getCollection('projects')).sort(
 				border-radius: 4px;
 				margin-bottom: 0.5rem;
 			}
+			.misc {
+				margin-top: 3rem;
+			}
+			.misc h2 {
+				font-size: 1.5rem;
+				margin-bottom: 0.25rem;
+			}
+			.misc .intro {
+				margin: 0 0 1.5rem 0;
+				color: rgb(var(--gray));
+			}
 		</style>
 	</head>
 	<body>
@@ -135,6 +162,29 @@ const projects = (await getCollection('projects')).sort(
 											))}
 										</div>
 									)}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+			<section class="misc">
+				<h2>Misc</h2>
+				<p class="intro">Smaller side projects and experiments.</p>
+				<ul>
+					{
+						misc.map((item) => (
+							<li>
+								<a href={item.href}>
+									<p class="date">
+										Updated: {item.updated.toLocaleDateString('en-us', {
+											year: 'numeric',
+											month: 'short',
+										})}
+									</p>
+									<h4>{item.title}</h4>
+									<p>{item.description}</p>
+									<span class="status completed">{item.count}</span>
 								</a>
 							</li>
 						))

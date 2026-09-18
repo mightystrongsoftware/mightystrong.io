@@ -91,6 +91,17 @@ const items = (await getCollection('kidshw')).sort(
 				border-radius: 4px;
 				font-size: 0.75rem;
 			}
+			.breadcrumb {
+				margin: 0 0 0.5rem 0;
+				font-size: 0.875rem;
+			}
+			.breadcrumb a {
+				color: rgb(var(--gray));
+				text-decoration: none;
+			}
+			.breadcrumb a:hover {
+				color: rgb(var(--accent));
+			}
 			.item-image {
 				width: 100%;
 				height: 150px;
@@ -103,6 +114,7 @@ const items = (await getCollection('kidshw')).sort(
 	<body>
 		<Header />
 		<main>
+			<p class="breadcrumb"><a href="/projects/">&larr; Projects</a></p>
 			<h1>Kids HW</h1>
 			<section>
 				<ul>
