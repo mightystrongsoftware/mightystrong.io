@@ -6,8 +6,9 @@ technologies: ['Swift', 'SwiftUI', 'MusicKit', 'iMessage Extension', 'App Groups
 image: '/assets/img/songcue-screenshot.png'
 ogImage: '../../assets/og-songcue.png'
 appStoreId: '6808849410'
+link: 'https://apps.apple.com/app/id6808849410'
 featured: true
-status: 'in-progress'
+status: 'completed'
 startDate: 2026-08-29
 ---
 
@@ -63,4 +64,6 @@ SongCue collects nothing. There are no servers and no analytics. Challenges and 
 
 ## Status
 
-SongCue is going through App Store review now. A link will land here once it's live.
+SongCue is [available on the App Store](https://apps.apple.com/app/id6808849410).
+
+A new quiz version is coming soon, and its headline new feature is the Daily Quiz. Every morning you get one two-second snippet, picked from the genres you actually listen to, and a single guess to name it. Turn on the reminder and SongCue will let you know when the day's song drops.
