@@ -30,13 +30,23 @@ So the app does what is possible now:
 
 ## What else it does
 
-- **C2PA Content Credentials.** Parses the JUMBF manifest store for claim version, assertion labels, signer certificate names, edit actions, and AI training policies. Detection only, no signature verification.
+- **C2PA Content Credentials.** Parses the JUMBF manifest store for claim version, assertion labels, signer certificate names, edit actions, and AI training policies. Detection only, no signature verification. More on what those are [below](#a-primer-on-c2pa-and-jumbf).
 - **Tamper heuristics.** Missing camera metadata, editing software recorded, modified after capture, resized since capture, XMP edit history, Adobe namespaces, progressive JPEG re-encodes, Photoshop resource blocks, extension mismatches, and more.
 - **Full metadata.** Every ImageIO dictionary (EXIF, TIFF, GPS, IPTC, Apple maker notes), a parsed XMP summary, and the raw XMP packet, with per-tag copy.
 - **Location.** Embedded GPS on a map with altitude, accuracy, and an Open in Maps link.
 - **Integrity.** SHA-256, MD5, file size, and magic bytes.
 - **Container structure.** JPEG segments, PNG chunks, and HEIF boxes, including JUMBF detection.
 - **Export.** Share the whole report as plain text.
+
+## A primer on C2PA and JUMBF
+
+Apple Reference Image is one answer to "where did this photo come from?" The industry-wide answer is [C2PA](https://c2pa.org/), the Coalition for Content Provenance and Authenticity. It's a standards body backed by Adobe, Microsoft, Google, the BBC, camera makers like Leica and Nikon, and a long list of others, and it publishes an [open specification](https://spec.c2pa.org/specifications/) for attaching a tamper-evident history to a piece of media.
+
+The consumer-facing name for that history is [Content Credentials](https://contentcredentials.org/). Think of it as a nutrition label for an image. A Content Credential is a **manifest**: a bundle of signed **claims** and **assertions** that say things like which device or app created the file, what edits were made and by what tool, whether generative AI was involved, and whether the creator allows the image to be used for AI training. Each manifest is signed with a certificate, and every subsequent edit can add a new manifest that references the previous one, so the file carries a chain of custody. If you have a file with credentials in it, the [Content Credentials verify tool](https://contentcredentials.org/verify) will show you the chain.
+
+Manifests have to live somewhere inside the file, and that's where **JUMBF** comes in. JUMBF is the JPEG Universal Metadata Box Format, Part 5 of the [JPEG Systems](https://jpeg.org/jpegsystems/) family of standards (ISO/IEC 19566-5). It's a generic container for stuffing structured metadata into JPEG, PNG, HEIF, and other formats without disturbing the image data. C2PA [uses JUMBF as its envelope](https://spec.c2pa.org/specifications/specifications/2.2/specs/C2PA_Specification.html#_use_of_jumbf): the manifest store is a JUMBF superbox, holding boxes for the claim, its signature, and the assertions, embedded as an APP11 segment in a JPEG, a `caBX` chunk in a PNG, or a `jumb` box in HEIF. That's why the container walk in this app flags JUMBF when it sees it. Finding the box is the first step to finding the credentials.
+
+What Forensic Imagery does today is read that structure and surface it: the claim version, the labels of each assertion, the signer's certificate name, the recorded edit actions, and any AI training policy. What it does not do is verify the signature or walk the certificate chain back to a trusted root. That's a real cryptographic check with trust-list and revocation questions attached, and it's better handled by the open-source [c2pa-rs](https://github.com/contentauth/c2pa-rs) library from the Content Authenticity Initiative than by something I'd hand-roll in Swift. Detection tells you a credential is present. Verification tells you whether to believe it. The app is honest about which one it's giving you.
 
 ## Image sources
 
