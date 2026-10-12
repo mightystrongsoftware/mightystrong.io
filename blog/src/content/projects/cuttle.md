@@ -58,6 +58,10 @@ The renderer runs sandboxed with context isolation and no Node access. Every fil
 
 Cuttle is an independent project and is not affiliated with inkle.
 
+## Privacy
+
+Cuttle collects nothing. There are no servers, no accounts, and no analytics. It reads and writes only the files and folders you choose, and the only data it keeps on its own is a local list of recent projects and your window layout. Your stories never leave your machine. The full [Cuttle privacy policy](/privacy/cuttle/) has the details.
+
 ## Status
 
 The editor, preview, graph, and debugger all work today. Signed and notarized macOS builds come out of CI, and a Mac App Store submission is in progress. Windows and Linux builds are not configured yet. Before calling it 1.0 I'm validating it against real published ink projects and setting performance budgets for large stories.
