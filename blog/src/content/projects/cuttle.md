@@ -58,6 +58,17 @@ The renderer runs sandboxed with context isolation and no Node access. Every fil
 
 Cuttle is an independent project and is not affiliated with inkle.
 
+## Support
+
+Questions, bug reports, or a story that won't compile in Cuttle but does in Inky? Email [evan+cuttle@mightystrong.io](mailto:evan+cuttle@mightystrong.io) and I'll get back to you.
+
+A few things worth checking first:
+
+- **A file isn't showing up in the Explorer.** Cuttle only sees `.ink` files inside the folder you opened. Files elsewhere on disk need to be moved in, or the parent folder opened instead.
+- **An `INCLUDE` can't be found.** Paths are relative to the file doing the including, and the filename's case has to match exactly, even on macOS.
+- **The preview shows an `EXTERNAL` function notice.** Functions your game engine normally provides are stubbed to do nothing in the preview. Give them an ink fallback function if you want them to behave during play.
+- **Edits made in another editor aren't appearing.** Clean files reload automatically. If you have unsaved changes in Cuttle, it will ask whether to keep your version or reload from disk.
+
 ## Privacy
 
 Cuttle collects nothing. There are no servers, no accounts, and no analytics. It reads and writes only the files and folders you choose, and the only data it keeps on its own is a local list of recent projects and your window layout. Your stories never leave your machine. The full [Cuttle privacy policy](/privacy/cuttle/) has the details.
