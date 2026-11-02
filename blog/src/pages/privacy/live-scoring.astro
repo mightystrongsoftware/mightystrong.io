@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="Live Scoring Privacy Policy"
+	description="Privacy Policy for Live Scoring, the free two-team scoreboard app for iOS, Android and the web"
+	pubDate={new Date('November 1 2026')}
+>
+	<h2>Privacy Policy for Live Scoring</h2>
+	<p><strong>Last Updated:</strong> November 1, 2026</p>
+
+	<h3>Overview</h3>
+	<p>
+		Live Scoring by netmetrics.cloud ("we", "our", or "us") is a simple scorekeeping application
+		for iOS, Android, and the web. We do not ask for your name, email address, or any account,
+		and we never sell data. This policy describes the small amount of data the app does handle
+		and how you can control it.
+	</p>
+
+	<h3>Game Data</h3>
+	<p>
+		Scores, team names, team colors, and game history are stored locally on your device (or in
+		your browser's local storage on the web). This data stays on your device unless you choose
+		to share results or turn on live streaming. You can delete all of it at any time from
+		<strong>Advanced &gt; Clear Storage</strong> inside the app.
+	</p>
+
+	<h3>Live Streaming (Optional)</h3>
+	<p>
+		If you turn on live streaming, the current score, team names, and team colors are sent to
+		our servers (Google Firebase) under a random 6-character stream code so that anyone with the
+		code or link can watch the game. No information about you or your device is included.
+		Stream data expires automatically a few hours after the last update, and turning streaming
+		off marks the stream inactive immediately.
+	</p>
+
+	<h3>Usage Analytics</h3>
+	<p>
+		The app uses Google Analytics for Firebase to understand how it is used so we can improve
+		it. This records anonymous events such as "game started" or "results shared", along with
+		general information like app version, device model, operating system, language, and
+		country-level location derived from your network address. Events are tied to a random
+		analytics ID generated for this installation, not to your name or any account. Scores, team
+		names, and stream codes are never sent to analytics.
+	</p>
+	<p>
+		You can turn analytics off at any time in <strong>Advanced &gt; Usage analytics</strong>.
+		Doing so stops collection and deletes the analytics ID for this device. The app does not
+		request permission to track you across other apps or websites, and does not use advertising
+		identifiers.
+	</p>
+
+	<h3>Feature Settings</h3>
+	<p>
+		On startup the app downloads a small configuration file from Firebase Remote Config that
+		turns optional features (such as SharePlay on iOS) on or off. This request does not include
+		any personal information.
+	</p>
+
+	<h3>SharePlay (iOS)</h3>
+	<p>
+		When available, SharePlay lets people on a FaceTime call see the score together. Score
+		updates travel through Apple's SharePlay service and are not stored by us.
+	</p>
+
+	<h3>Third-Party Services</h3>
+	<p>
+		The services above are provided by Google (Firebase) and, for SharePlay, Apple. Their
+		handling of data is governed by their own privacy policies:
+	</p>
+	<ul>
+		<li><a href="https://policies.google.com/privacy">Google Privacy Policy</a></li>
+		<li><a href="https://firebase.google.com/support/privacy">Firebase Privacy and Security</a></li>
+		<li><a href="https://www.apple.com/legal/privacy/">Apple Privacy Policy</a></li>
+	</ul>
+	<p>
+		We do not use advertising networks and we do not share or sell your data to anyone else.
+	</p>
+
+	<h3>Cookies</h3>
+	<p>
+		The web version uses browser local storage to save your game data and preferences, and
+		Google Analytics may store a first-party cookie or local storage entry holding the random
+		analytics ID. No advertising or cross-site tracking cookies are used.
+	</p>
+
+	<h3>Children's Privacy</h3>
+	<p>
+		This app is suitable for users of all ages. We do not knowingly collect personal information
+		from anyone, including children, and the analytics described above is anonymous.
+	</p>
+
+	<h3>App Store Information</h3>
+	<p>
+		When you download Live Scoring from the App Store or Google Play, Apple or Google may
+		collect information according to their own privacy policies. We do not receive personally
+		identifiable information from them beyond aggregated, anonymous download and crash
+		statistics that they provide to all developers.
+	</p>
+
+	<h3>Changes to This Policy</h3>
+	<p>
+		We may update this Privacy Policy from time to time. Any changes will be reflected on this
+		page and inside the app with an updated "Last Updated" date.
+	</p>
+
+	<h3>Contact Us</h3>
+	<p>
+		If you have any questions about this Privacy Policy, please contact us at:
+	</p>
+	<p>
+		<a href="mailto:support@netmetrics.cloud">support@netmetrics.cloud</a>
+	</p>
+</Layout>
