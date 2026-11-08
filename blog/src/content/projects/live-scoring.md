@@ -64,3 +64,7 @@ Email us at evan@netmetrics.cloud with details about your issue or suggestion.
 ## Privacy
 
 Live Scoring has no accounts and never sells data. Scores and game history stay on your device unless you turn on live streaming, which publishes the current score under a random stream code. The app uses anonymous Google Analytics for Firebase to see how features are used, and you can switch that off at any time under Advanced > Usage analytics. The full [Live Scoring privacy policy](/privacy/live-scoring/) has the details.
+
+## Terms of Service
+
+Use of Live Scoring is covered by the [Live Scoring terms of service](/terms/live-scoring/).
